@@ -113,7 +113,7 @@ class PlayingCard(object):
 
 AllPlayingCardsDict = dict()
 ###############################
-AllPlayingCardsDict["%s-A-%s" % (PlayingCardNames.Carabine, PlayingCardSuits.Club)] = PlayingCard(PlayingCardNames.Carabine, "A", PlayingCardSuits.Club, NormalCardColors.Blue)
+AllPlayingCardsDict["%s-A-%s" % (PlayingCardNames.Carabine, PlayingCardSuits.Club)] = PlayingCard(PlayingCardNames.Carabine, "A", PlayingCardSuits.Club, PlayingCardColors.Blue)
 for i in range(2,8):
     AllPlayingCardsDict["%s-%d-%s" % (PlayingCardNames.Duello, i, PlayingCardSuits.Club)] = PlayingCard(PlayingCardNames.Bang, "%d" % (i), PlayingCardSuits.Club, NormalCardColors.Brown)
 AllPlayingCardsDict["%s-8-%s" % (PlayingCardNames.Duello, PlayingCardSuits.Club)] = PlayingCard(PlayingCardNames.Duello, "8", PlayingCardSuits.Club, NormalCardColors.Brown)

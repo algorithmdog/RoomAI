@@ -1,6 +1,7 @@
 #!/bin/python
 import random
 import copy
+from random import choice
 
 import roomai
 from roomai.games.common import AbstractEnv
@@ -12,6 +13,7 @@ from roomai.games.bang   import PublicPersonInfo
 
 from roomai.games.bang   import AllCharacterCardsDict
 from roomai.games.bang   import PlayingCardNames
+from roomai.games.bang   import CardRole
 
 class BangEnv(AbstractEnv):
 
@@ -82,18 +84,30 @@ class BangEnv(AbstractEnv):
         for i in range(len(person_states)):
             self.__person_states_history__[i].append(person_states[i])
 
-        self.__playerid_action_history__.append(public_state.turn, action)
-
         if action.type == BangActionChance.BangActionChanceType.charactercard:  # chance player deals character cards
-            public_state.__public_person_infos__[public_state.turn].__character_card__ = action
+            person_states[public_state.turn].__available_actions__ = self.available_actions()
+            for i in range(len(public_state.__public_person_infos__)):
+                if public_state.__public_person_infos__[i].__character_card is None:  # sample a character card to that player
+                    public_state.__public_person_infos__[i].__character_card = \
+                        person_states[public_state.turn].__available_actions__[choice(person_states[public_state.turn].__available_actions__.keys)]
+                    return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
+            # if all players have been assigned a character, return
             return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
 
         if action.type == BangActionChance.BangActionChanceType.rolecard: # chance player deals role cards
-            person_states[public_state.turn].__role__ = action
+            person_states[public_state.turn].__available_actions__ = self.available_actions()
+            for i in range(public_state.param_num_normal_players):
+                if person_states[i].__role__ is None:  # sample a role card to that player
+                    person_states[i].__role__ = person_states[public_state.turn].__available_actions__[choice(person_states[public_state.turn].__available_actions__.keys)]
+                    if person_states[i].__role__ == CardRole.RoleCard(CardRole.RoleCardNames.sheriff):
+                        public_state.__sheriff_id__ = i
 
         if action.type == BangActionChance.BangActionChanceType.normalcard:  # chance player shuffle cards
+            if len(private_state.library) == 0:  # there is no card, and the chance player needs to shuffle discard cards
+                private_state.__library__ = public_state.__discard_pile__
 
-
+        person_states[public_state.turn].__available_actions__ = dict()
+        public_state.__turn__ = (public_state.turn + 1) % 2
 
     def available_actions(self):
         '''
@@ -117,38 +131,55 @@ class BangEnv(AbstractEnv):
             return available_actions
 
         ## rolecard
-        if self.__public_state_history__[-1].__public_person_infos__[-1].__role_card__ is None:
-            available_actions = dict()
-            tmp_set = set()
-            num_sheriff = 0
-            num_deputy_sheriff = 0
-            num_renegade = 0
-            num_outlaw = 0
+        for i in range(self.__public_state_history__[-1].param_num_normal_players):
+            if self.__person_states_history__[i].person_states[-1].__role_card__ is None:
+                available_actions = dict()
+                tmp_set = set()
+                num_sheriff = 0
+                num_deputy_sheriff = 0
+                num_renegade = 0
+                num_outlaw = 0
 
-            for i in range(len(self.__public_state_history__[-1].__public_person_infos__)):
-                if self.__public_state_history__[-1].__public_person_infos__[i].__role_card__ is not None:
-                    tmp_set.add(self.__public_state_history__[-1].__public_person_infos__[i].__role_card__.key)
+                for j in range(len(self.__public_state_history__[-1].param_num_normal_players)):
+                    if self.__person_states_history__[j].person_states[-1].__role_card__ is not None:
+                        tmp_set.add(self.__person_states_history__[j].person_states[-1].__role_card__.key)
 
-            if self.__public_state_history__[-1].__param_num_normal_players__ == 2:
+                if self.__public_state_history__[-1].__param_num_normal_players__ == 2:
+                    return available_actions
+
+                elif self.__public_state_history__[-1].__param_num_normal_players__ == 4:
+                    num_sheriff = 1
+                    num_renegade = 1
+                    num_outlaw = 2
+
+                elif self.__public_state_history__[-1].__param_num_normal_players__ == 5:
+                    num_sheriff = 1
+                    num_deputy_sheriff = 1
+                    num_renegade = 1
+                    num_outlaw = 2
+
+                else:
+                    logger.fatal("param_num_normal_players not in [2,4,5]")
+                    raise ValueError("param_num_normal_players not in [2,4,5]")
+
+                for key in tmp_set:
+                    if key == CardRole.RoleCardNames.sheriff:
+                        num_sheriff = num_sheriff - 1
+                    if key == CardRole.RoleCardNames.deputy_sheriff:
+                        num_deputy_sheriff = num_deputy_sheriff - 1
+                    if key == CardRole.RoleCardNames.renegade:
+                        num_renegade = num_renegade - 1
+                    if key == CardRole.RoleCardNames.outlaw:
+                        num_outlaw = num_outlaw - 1
+                if num_sheriff > 0:
+                    available_actions[CardRole.RoleCardNames.sheriff] = BangActionChance.lookup(CardRole.RoleCardNames.sheriff)
+                if num_deputy_sheriff > 0:
+                    available_actions[CardRole.RoleCardNames.deputy_sheriff] = BangActionChance.lookup(CardRole.RoleCardNames.deputy_sheriff)
+                if num_renegade > 0:
+                    available_actions[CardRole.RoleCardNames.renegade] = BangActionChance.lookup(CardRole.RoleCardNames.renegade)
+                if num_outlaw > 0:
+                    available_actions[CardRole.RoleCardNames.outlaw] = BangActionChance.lookup(CardRole.RoleCardNames.outlaw)
                 return available_actions
-
-            elif self.__public_state_history__[-1].__param_num_normal_players__ == 4:
-                num_sheriff = 1
-                num_renegade = 1
-                num_outlaw = 2
-
-            elif self.__public_state_history__[-1].__param_num_normal_players__ == 5:
-                num_sheriff = 1
-                num_deputy_sheriff = 1
-                num_renegade = 1
-                num_outlaw = 2
-
-            else:
-                logger.fatal("param_num_normal_players not in [2,4,5]")
-                raise ValueError("param_num_normal_players not in [2,4,5]")
-
-
-
 
         ##
         available_actions = dict()

@@ -7,7 +7,6 @@ class PublicPersonInfo(object):
         self.__num_hand_cards__  = 0
         self.__character_card__  = None
         self.__equipment_cards__ = []
-        self.__role_card__       = None
 
     def __get_num_hand_cards__(self):   return self.__num_hand_cards__
     num_hand_cards = property(__get_num_hand_cards__,doc="The number of hand cards")
@@ -27,7 +26,7 @@ class BangStatePublic(AbstractStatePublic):
 
     def __init__(self):
         self.__public_person_infos__  = []
-        self.__sheriff_id__           = 0
+        self.__sheriff_id__           = -1
         self.__discard_pile__         = []
 
     def __get_public_person_infos__(self):   return tuple(self.__public_person_infos__)
