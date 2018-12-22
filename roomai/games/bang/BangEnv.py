@@ -10,6 +10,7 @@ from roomai.games.bang   import BangStatePublic
 from roomai.games.bang   import BangStatePrivate
 from roomai.games.bang   import BangStatePerson
 from roomai.games.bang   import PublicPersonInfo
+from roomai.games.bang   import PhaseInfo
 
 from roomai.games.bang   import AllCharacterCardsDict
 from roomai.games.bang   import PlayingCardNames
@@ -30,9 +31,11 @@ class BangEnv(AbstractEnv):
 
 
         logger         = roomai.get_logger()
+        ############ public state and private state ##########
         public_state   = BangStatePublic()
         private_state  = BangStatePrivate()
-
+        self.__public_state_history__.append(public_state)
+        self.__private_state_history__.append(private_state)
         if "param_num_normal_players" in params:
             public_state.__param_num_normal_players__ = params["param_num_normal_players"]
         else:
@@ -46,22 +49,23 @@ class BangEnv(AbstractEnv):
         for i in range(public_state.__param_num_normal_players__):
             public_state.__public_person_infos__[i].__num_hand_cards__ = 0
             public_state.__public_person_infos__[i].__character_card__ = None
-
             public_state.__public_person_infos__[i].__equipment_cards__ = []
+        public_state.__phase_info__ = PhaseInfo()
+        public_state.__phase_info__.__playid__ = public_state.__param_num_normal_players__
+        public_state.__phase_info__.__phase__  = PhaseInfo.ChancePlay
+        public_state.__turn__                  = public_state.__param_num_normal_players__
 
+        ########### person states #########
         person_states = [BangStatePerson() for i in range(public_state.param_num_normal_players+1)]
-
-        self.__public_state_history__.append(public_state)
-        self.__private_state_history__.append(private_state)
         for i in range(public_state.param_num_normal_players):
             self.__person_states_history__[i].append(person_states[i])
             self.__person_states_history__[i][0].__id__         = i
             self.__person_states_history__[i][0].__hand_cards__ = []
             self.__person_states_history__[i][0].__role__       = ""
-        self.__person_states_history__[public_state.__param_num_normal_players__][0].__available_actions__ = self.available_actions()
-        
 
-        self.__gen_infos__()
+        person_states[public_state.__param_num_normal_players__][0].__available_actions__ = self.available_actions()
+
+        return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__, self.__playerid_action_history__
 
 
     def forward(self, action):
@@ -102,7 +106,7 @@ class BangEnv(AbstractEnv):
                     if person_states[i].__role__ == CardRole.RoleCard(CardRole.RoleCardNames.sheriff):
                         public_state.__sheriff_id__ = i
 
-        if action.type == BangActionChance.BangActionChanceType.normalcard:  # chance player shuffle cards
+        if action.type == BangActionChance.BangActionChanceType.playingcard:  # chance player shuffle cards
             if len(private_state.library) == 0:  # there is no card, and the chance player needs to shuffle discard cards
                 private_state.__library__ = copy(public_state.__discard_pile__)
 

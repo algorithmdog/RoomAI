@@ -289,7 +289,6 @@ class BangAction(AbstractAction):
     BangAction is the action played by the normal players \n\n
     The action key looks like "cardkey_firsttarget(option)_secondtarget(option)"
     
-    
     '''
     def __init__(self, key):
         logger = roomai.get_logger()
@@ -303,9 +302,6 @@ class BangAction(AbstractAction):
             self.__card__ = AllPlayingCardsDict[keys[0]]
         else:
             logger.info("%s is invalid action key, since the cardkey %s is invalid"%(key, keys[0]))
-
-
-
 
     @classmethod
     def lookup(self, key):

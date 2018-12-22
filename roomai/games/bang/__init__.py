@@ -16,6 +16,7 @@ from roomai.games.bang.CardRole import AllRoleCardsDict
 
 from roomai.games.bang.BangStatePublic import BangStatePublic
 from roomai.games.bang.BangStatePublic import PublicPersonInfo
+from roomai.games.bang.BangStatePublic import PhaseInfo
 
 from roomai.games.bang.BangStatePerson import BangStatePerson
 from roomai.games.bang.BangStatePrivate import BangStatePrivate
