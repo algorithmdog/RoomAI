@@ -320,26 +320,31 @@ class BangAction(AbstractAction):
 ### add all playing cards
 for playingcard in AllPlayingCardsDict:
     if playingcard.name == PlayingCardNames.Duello:
-        AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
+        for i in range(5):
+            AllBangActionsDict[playingcard.key] = BangAction(playingcard.key+"-%d"%(i))
     elif playingcard.name == PlayingCardNames.Bang:
         AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
         for i in range(5):
             AllBangActionsDict[playingcard.key] = BangAction(playingcard.key+"-%d"%(i))
     elif playingcard.name == PlayingCardNames.StageCoach:
         AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
-    elif playingcard.name == PlayingCardNames.Indian:
+    elif playingcard.name == PlayingCardNames.Indian: ##   类似于南蛮入侵
         AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
     elif playingcard.name == PlayingCardNames.Miss:
         AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
+    elif playingcard.name == PlayingCardNames.Panic: ## 顺手牵羊
+        for i in range(5):
+            AllBangActionsDict[playingcard.key] = BangAction(playingcard.key+"-%d"%(i))
+    elif playingcard.name == PlayingCardNames.Barrel: ## 八卦阵
+        AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
+
 
     elif card.name == PlayingCardNames.Emporia:
         pass
 
-
     elif card.name == PlayingCardNames.Remington:
         pass
-    elif card.name == PlayingCardNames.Panic:
-        pass
+
     elif card.name == PlayingCardNames.Dynamite:
         pass
     elif card.name == PlayingCardNames.WellsFargo:
@@ -355,10 +360,6 @@ for playingcard in AllPlayingCardsDict:
     elif card.name == PlayingCardNames.CatBalou:
         pass
 
-    elif card.name == PlayingCardNames.StageCoach:
-        pass
-    elif card.name == PlayingCardNames.Barrel:
-        pass
 
 
 
