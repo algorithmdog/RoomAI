@@ -1,7 +1,7 @@
 #!/bin/python
 #coding:utf-8
 import roomai.games.common
-from roomai.games.texasholdem.TexasHoldemUtil import AllPokerCards
+from roomai.games.texasholdem.TexasHoldemUtil import AllPokerCardsDict
 from roomai.games.texasholdem.TexasHoldemUtil import PokerCard
 
 class TexasHoldemActionChance(roomai.games.common.AbstractActionChance):
@@ -54,7 +54,7 @@ class TexasHoldemActionChance(roomai.games.common.AbstractActionChance):
         return TexasHoldemActionChance.lookup(self.key)
 
 AllTexasActionChances = dict()
-for pokercard_key in AllPokerCards:
+for pokercard_key in AllPokerCardsDict:
     AllTexasActionChances[pokercard_key] = TexasHoldemActionChance(pokercard_key)
 
 

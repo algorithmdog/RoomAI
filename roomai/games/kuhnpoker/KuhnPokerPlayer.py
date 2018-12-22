@@ -2,7 +2,7 @@
 #coding:utf-8
 import random
 import roomai.games.common
-import roomai.kuhnpoker.KuhnPokerActionChance
+import roomai.games.kuhnpoker.KuhnPokerActionChance
 
 class KuhnPokerChancePlayer(roomai.games.common.AbstractPlayer):
     def receive_info(self, info):

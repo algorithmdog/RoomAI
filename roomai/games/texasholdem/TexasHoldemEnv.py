@@ -41,11 +41,6 @@ class TexasHoldemEnv(roomai.games.common.AbstractEnv):
         else:
             public_state.__param_num_normal_players__ = 3
 
-        if "param_start_turn" in params:
-            public_state.__param_start_turn__ = params["param_start_turn"]
-        else:
-            public_state.__param_start_turn__ = int(random.random() * public_state.param_num_normal_players)
-
         if "param_dealer_id" in params:
             public_state.__param_dealer_id__ = params["param_dealer_id"]
         else:
@@ -259,7 +254,7 @@ class TexasHoldemEnv(roomai.games.common.AbstractEnv):
         if len(pr.all_used_cards) < (len(pes)-1) * 2 + 5:
             candidate_chance_actions = dict()
             all_used_card_keys = set([c.key for c in pr.all_used_cards])
-            for card_key in AllPokerCards:
+            for card_key in AllPokerCardsDict:
                 if card_key not in all_used_card_keys:
                     chance_action = TexasHoldemActionChance.lookup(card_key)
                     candidate_chance_actions[chance_action.key] = chance_action

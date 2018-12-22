@@ -18,28 +18,28 @@ class RoleCard(object):
             logger.fatal("In the constructor RoleCard(rolecard), the rolecard must be one of [%s,%s,%s,%s]"%(RoleCardNames.sheriff, RoleCardNames.deputy_sheriff, RoleCardNames.outlaw, RoleCardNames.renegade))
             raise TypeError("In the constructor RoleCard(rolecard), the rolecard must be one of [%s,%s,%s,%s]"%(RoleCardNames.sheriff, RoleCardNames.deputy_sheriff, RoleCardNames.outlaw, RoleCardNames.renegade))
 
-        self.__role__ = role
+        self.__name1__ = role
 
-    def __get_role__(self):
-        return self.__role__
-    role = property(__get_role__, doc="The rolecard")
+    def __get_name__(self):
+        return self.__name1__
+    name = property(__get_name__, doc="The name of the role card")
 
     def __get_key__(self):  return self.__role__
-    key = property(__get_key__, doc = "The key of rolecard normalcard is the rolecard")
+    key = property(__get_key__, doc = "The key of role card")
 
     @classmethod
     def lookup(cls, key):
         logger = roomai.get_logger()
-        if key not in RoleCardsDict:
+        if key not in AllRoleCardsDict:
             logger.fatal("%s is not valid rolecard key"%(key))
             raise TypeError("%s is not valid rolecard key"%(key))
-        return RoleCardsDict[key]
+        return AllRoleCardsDict[key]
 
     def __deepcopy__(self, memodict={}):
-        return RoleCardsDict[self.key]
+        return AllRoleCardsDict[self.key]
 
-RoleCardsDict = dict()
-RoleCardsDict[RoleCardNames.sheriff]        = RoleCard(RoleCardNames.sheriff)
-RoleCardsDict[RoleCardNames.deputy_sheriff] = RoleCard(RoleCardNames.deputy_sheriff)
-RoleCardsDict[RoleCardNames.outlaw]         = RoleCard(RoleCardNames.outlaw)
-RoleCardsDict[RoleCardNames.renegade]       = RoleCard(RoleCardNames.renegade)
+AllRoleCardsDict = dict()
+AllRoleCardsDict[RoleCardNames.sheriff]        = RoleCard(RoleCardNames.sheriff)
+AllRoleCardsDict[RoleCardNames.deputy_sheriff] = RoleCard(RoleCardNames.deputy_sheriff)
+AllRoleCardsDict[RoleCardNames.outlaw]         = RoleCard(RoleCardNames.outlaw)
+AllRoleCardsDict[RoleCardNames.renegade]       = RoleCard(RoleCardNames.renegade)

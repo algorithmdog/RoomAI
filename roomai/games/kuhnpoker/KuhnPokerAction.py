@@ -25,7 +25,7 @@ class KuhnPokerAction(roomai.games.common.AbstractAction):
     def lookup(cls, key):
         return AllKuhnActions[key]
 
-    def __deepcopy__(self, memodict={}, newinstance = None):
+    def __deepcopy__(self, memodict={}):
         return KuhnPokerAction.lookup(self.key)
 
 AllKuhnActions = {"bet":KuhnPokerAction("bet"),"check":KuhnPokerAction("check")}

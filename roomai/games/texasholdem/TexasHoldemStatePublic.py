@@ -20,6 +20,10 @@ class TexasHoldemStatePublic(roomai.games.common.AbstractStatePublic):
         self.__is_needed_to_action__            = None
         self.__num_needed_to_action__           = None
 
+        self.__param_dealer_id__ = -1
+        self.__param_big_blind_bet__ = -1
+        self.__param_init_chips__ = None
+
 
         #chips is array which contains the chips of all players
         self.__chips__              = None
@@ -119,7 +123,7 @@ class TexasHoldemStatePublic(roomai.games.common.AbstractStatePublic):
             newinstance.__param_dealer_id__     = self.param_dealer_id
             newinstance.__param_big_blind_bet__ = self.param_big_blind_bet
             newinstance.__param_init_chips__    = self.__param_init_chips__
-            newinstance.__param_start_turn__    = self.__param_start_turn__
+
 
             newinstance.__stage__         = self.stage
             if self.public_cards is None:

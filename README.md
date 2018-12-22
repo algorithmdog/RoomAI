@@ -6,7 +6,7 @@
 
 
 
-RoomAI is a toolkit for developing AI-bots of Texas Holdem and Killers of Three Kingdoms (KTK).
+RoomAI is a toolkit for developing AI-bots of KuhnPoker, Texas Holdem and Bang!.
 
 
 
@@ -26,10 +26,10 @@ Try your first RoomAI program
 from roomai.games. import *;
 import roomai.common
 
-class KuhnPokerExamplePlayer(roomai.common.AbstractPlayer):
+class KuhnPokerExamplePlayer(roomai.games.common.AbstractPlayer):
     def receive_info(self, info):
-        if info.person_state.available_actions is not None:
-            self.available_actions = info.person_state.available_actions
+        if info.person_state_history[-1].available_actions is not None:
+            self.available_actions = info.person_state_history[-1].available_actions
 
     def take_action(self):
         values = self.available_actions.values()
@@ -39,11 +39,11 @@ class KuhnPokerExamplePlayer(roomai.common.AbstractPlayer):
         pass
 
 if __name__ == "__main__":
-    players = [KuhnPokerExamplePlayer() for i in range(2)] + [roomai.common.RandomPlayerChance()]
-    # RandomChancePlayer is the chance player with the uniform distribution over every output
-    env = KuhnPokerEnv()
-    scores = KuhnPokerEnv.compete(env, players)
-    print(scores)
+        players = [KuhnPokerExamplePlayer() for i in range(2)] + [roomai.games.common.RandomPlayerChance()]
+        # RandomChancePlayer is the chance player with the uniform distribution over every output
+        env = roomai.games.kuhnpoker.KuhnPokerEnv()
+        scores = env.compete_silent(env, players)
+        print(scores)
 </pre>
 
 

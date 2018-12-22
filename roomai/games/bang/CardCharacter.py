@@ -35,41 +35,42 @@ class CharacterCardNames:
     #Willy the Kid = Billy the Kid – He can play any number of "Bang!" cards. (4 life points)
 
 class CharacterCard(object):
-    def __init__(self, person, hp):
-        self.__person__ = person
-        self.__hp__   = hp
-        self.__key__  = person
 
-    def __get_person__(self):
-        return self.__person__
-    person = property(__get_person__, doc="The person name of charactercard")
+    def __init__(self, character, hp):
+        self.__hp__   = hp
+        self.__key__  = character
+        self.__name1__ = character
+
+
+    def __get_name__(self):
+        return self.__name1__
+    name = property(__get_name__, doc="The person name of character card")
 
     def __get_hp__(self):
         return self.__hp__
-    hp = property(__get_hp__, doc = "The init hp of this charactercard")
-
+    hp = property(__get_hp__, doc = "The init hp of this character card")
 
     def __get_key__(self):  return self.__key__
-    key = property(__get_key__, doc = "The key of this charactercard")
+    key = property(__get_key__, doc = "The key of this character card")
 
     def __deepcopy__(self, memodict={}):
-        return CharacterCardsDict[self.__key__]
+        return AllCharacterCardsDict[self.__key__]
 
 
-CharacterCardsDict = dict()
-CharacterCardsDict[CharacterCardNames.Jesse_Jones] = CharacterCard(CharacterCardNames.Jesse_Jones, 4)
-CharacterCardsDict[CharacterCardNames.Vulture_Sam] = CharacterCard(CharacterCardNames.Vulture_Sam, 4)
-CharacterCardsDict[CharacterCardNames.Bart_Cassidy] = CharacterCard(CharacterCardNames.Bart_Cassidy, 4)
-CharacterCardsDict[CharacterCardNames.Calamity_Janet] = CharacterCard(CharacterCardNames.Calamity_Janet, 4)
-CharacterCardsDict[CharacterCardNames.Black_Jack]  = CharacterCard(CharacterCardNames.Black_Jack, 4)
-CharacterCardsDict[CharacterCardNames.Jourdonnais] = CharacterCard(CharacterCardNames.Jourdonnais, 4)
-CharacterCardsDict[CharacterCardNames.Kit_Carlson] = CharacterCard(CharacterCardNames.Kit_Carlson, 4)
-CharacterCardsDict[CharacterCardNames.Rose_Doolan] = CharacterCard(CharacterCardNames.Rose_Doolan, 4)
-CharacterCardsDict[CharacterCardNames.Suzy_Lafayette] = CharacterCard(CharacterCardNames.Suzy_Lafayette, 4)
-CharacterCardsDict[CharacterCardNames.Sid_Ketchum] = CharacterCard(CharacterCardNames.Sid_Ketchum, 4)
-CharacterCardsDict[CharacterCardNames.EI_Gringo] = CharacterCard(CharacterCardNames.EI_Gringo, 3)
-CharacterCardsDict[CharacterCardNames.Lucky_Duke] = CharacterCard(CharacterCardNames.Lucky_Duke, 4)
-CharacterCardsDict[CharacterCardNames.Slab_Killer] = CharacterCard(CharacterCardNames.Slab_Killer, 4)
-CharacterCardsDict[CharacterCardNames.Paul_Regret] = CharacterCard(CharacterCardNames.Paul_Regret, 3)
-CharacterCardsDict[CharacterCardNames.Pedro_Ramirez] = CharacterCard(CharacterCardNames.Pedro_Ramirez, 4)
-CharacterCardsDict[CharacterCardNames.Willy_Kid] = CharacterCard(CharacterCardNames.Willy_Kid, 4)
+AllCharacterCardsDict = dict()
+AllCharacterCardsDict[CharacterCardNames.Jesse_Jones] = CharacterCard(CharacterCardNames.Jesse_Jones, 4)
+AllCharacterCardsDict[CharacterCardNames.Vulture_Sam] = CharacterCard(CharacterCardNames.Vulture_Sam, 4)
+AllCharacterCardsDict[CharacterCardNames.Bart_Cassidy] = CharacterCard(CharacterCardNames.Bart_Cassidy, 4)
+AllCharacterCardsDict[CharacterCardNames.Calamity_Janet] = CharacterCard(CharacterCardNames.Calamity_Janet, 4)
+AllCharacterCardsDict[CharacterCardNames.Black_Jack]  = CharacterCard(CharacterCardNames.Black_Jack, 4)
+AllCharacterCardsDict[CharacterCardNames.Jourdonnais] = CharacterCard(CharacterCardNames.Jourdonnais, 4)
+AllCharacterCardsDict[CharacterCardNames.Kit_Carlson] = CharacterCard(CharacterCardNames.Kit_Carlson, 4)
+AllCharacterCardsDict[CharacterCardNames.Rose_Doolan] = CharacterCard(CharacterCardNames.Rose_Doolan, 4)
+AllCharacterCardsDict[CharacterCardNames.Suzy_Lafayette] = CharacterCard(CharacterCardNames.Suzy_Lafayette, 4)
+AllCharacterCardsDict[CharacterCardNames.Sid_Ketchum] = CharacterCard(CharacterCardNames.Sid_Ketchum, 4)
+AllCharacterCardsDict[CharacterCardNames.EI_Gringo] = CharacterCard(CharacterCardNames.EI_Gringo, 3)
+AllCharacterCardsDict[CharacterCardNames.Lucky_Duke] = CharacterCard(CharacterCardNames.Lucky_Duke, 4)
+AllCharacterCardsDict[CharacterCardNames.Slab_Killer] = CharacterCard(CharacterCardNames.Slab_Killer, 4)
+AllCharacterCardsDict[CharacterCardNames.Paul_Regret] = CharacterCard(CharacterCardNames.Paul_Regret, 3)
+AllCharacterCardsDict[CharacterCardNames.Pedro_Ramirez] = CharacterCard(CharacterCardNames.Pedro_Ramirez, 4)
+AllCharacterCardsDict[CharacterCardNames.Willy_Kid] = CharacterCard(CharacterCardNames.Willy_Kid, 4)

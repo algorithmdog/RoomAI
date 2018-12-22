@@ -39,7 +39,7 @@ class KuhnPokerActionChance(roomai.games.common.AbstractActionChance):
     def lookup(cls, key):
         return AllKuhnChanceActions[key]
 
-    def __deepcopy__(self, memodict={}, newinstance=None):
+    def __deepcopy__(self, memodict={}):
         return KuhnPokerActionChance.lookup(self.key)
 
 AllKuhnChanceActions = {"0,1": KuhnPokerActionChance("0,1"), \

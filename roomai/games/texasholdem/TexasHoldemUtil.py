@@ -111,11 +111,11 @@ class PokerCard(object):
         '''
 
         logger = roomai.get_logger()
-        if key not in AllPokerCards:
+        if key not in AllPokerCardsDict:
             logger.fatal("key (%s) is not invalid poker normalcard key"%(key))
             raise ValueError("key (%s) is not invalid poker normalcard key"%(key))
 
-        return AllPokerCards[key]
+        return AllPokerCardsDict[key]
 
     @classmethod
     def point_to_rank(cls, point):
@@ -162,13 +162,13 @@ class PokerCard(object):
             return pokercard1.suit_rank - pokercard2.suit_rank
 
     def __deepcopy__(self, memodict={}, newinstance=None):
-        return AllPokerCards[self.key]
+        return AllPokerCardsDict[self.key]
 
 
-AllPokerCards = dict()
+AllPokerCardsDict = dict()
 for point in point_str_to_rank:
     for suit in suit_str_to_rank:
-        AllPokerCards["%s-%s" % (point, suit)] = PokerCard("%s-%s" % (point, suit))
+        AllPokerCardsDict["%s-%s" % (point, suit)] = PokerCard("%s-%s" % (point, suit))
 
 
 

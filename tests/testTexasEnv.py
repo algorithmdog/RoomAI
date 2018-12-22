@@ -324,3 +324,5 @@ class TexasEnvTester(unittest.TestCase):
         print (scores)
 
 
+    def testTextPlayer(self):
+        roomai.games.texasholdem.TexasHoldemExample.main(roomai.games.common.RandomPlayerChance(),roomai.games.common.RandomPlayerChance(),roomai.games.common.RandomPlayerChance())
