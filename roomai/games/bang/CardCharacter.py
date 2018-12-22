@@ -2,9 +2,9 @@
 
 class CharacterCardNames:
     Bart_Cassidy   = "Bart_Cassidy"
-    #Bart Cassidy = Butch Cassidy – Each time he loses a life point, he immediately draws a normalcard from the deck. (4 life points)
+    #Bart Cassidy = Butch Cassidy – Each time he loses a life point, he immediately draws a normal card from the deck. (4 life points)
     Black_Jack     = "Black_Jack"
-    #Black Jack = Tom Ketchum (known as Black Jack) – During phase 1 of his turn, he must show the second normalcard he draws: if it's a Heart or Diamond, he draws one additional normalcard that turn (without revealing it). (4 life points)
+    #Black Jack = Tom Ketchum (known as Black Jack) – During phase 1 of his turn, he must show the second normal card he draws: if it's a Heart or Diamond, he draws one additional normalcard that turn (without revealing it). (4 life points)
     Calamity_Janet = "Calamity_Janet"
     #Calamity Janet = Calamity Jane – She can use "Bang!" cards as "Missed!" cards and vice versa. She is still subject to "Bang!" limitations: If she plays a Missed! normalcard as a "Bang!", she cannot play another "Bang!" normalcard that turn (unless she has a Volcanic in play). (4 life points)
     EI_Gringo      = "EI_Gringo"
@@ -20,7 +20,7 @@ class CharacterCardNames:
     Paul_Regret    = "Paul_Regret"
     #Paul Regret = Paul Regret – The Comancheros (film) – He is considered to have a Mustang in play at all times; all other players must add 1 to the distance to him. If he has another real Mustang in play, he can count both of them, increasing all distance to him by a total of 2. (3 life points)
     Pedro_Ramirez  = "Pedro_Ramirez"
-    #Pedro Ramirez = Tuco Ramirez – The Ugly in the film The Good, the Bad and the Ugly (Fictional person) – During phase 1 of his turn, he may choose to draw the first normalcard from the top of the discard pile or from the deck. Then he draws the second normalcard from the deck. (4 life points)
+    #Pedro Ramirez = Tuco Ramirez – The Ugly in the film The Good, the Bad and the Ugly (Fictional person) – During phase 1 of his turn, he may choose to draw the first card from the top of the discard pile or from the deck. Then he draws the second normalcard from the deck. (4 life points)
     Rose_Doolan    = "Rose_Doolan"
     #Rose Doolan = She is considered to have a Scope (Appaloosa in older versions) in play at all times; she sees the other players at a distance decreased by 1. If she has another real Scope in play, she can count both of them, reducing her distance to all other players by a total of 2. (4 life points)
     Sid_Ketchum    = "Sid_Ketchum"

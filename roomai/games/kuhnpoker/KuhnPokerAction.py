@@ -3,11 +3,11 @@ import roomai.games.common
 class KuhnPokerAction(roomai.games.common.AbstractAction):
     '''
     The KuhnPoker action used by the normal players. There are only two actions: bet and check. Examples of usages: \n
-    >> import roomai.kuhnpoker\n
-    >> action = roomai.kuhnpoker.KuhnPokerAction.lookup("bet")\n
+    >> import roomai.games.kuhnpoker\n
+    >> action = roomai.games.kuhnpoker.KuhnPokerAction.lookup("bet")\n
     >> action.key\n
     "bet"\n
-    >> action = roomai.kuhnpoker.KuhnPokerAction.lookup("check")\n
+    >> action = roomai.games.kuhnpoker.KuhnPokerAction.lookup("check")\n
     >> action.key\n
     "check"\n
     '''
