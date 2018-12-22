@@ -9,7 +9,7 @@ from roomai.games.bang   import BangActionChance
 from roomai.games.bang   import BangStatePublic
 from roomai.games.bang   import BangStatePrivate
 from roomai.games.bang   import BangStatePerson
-from roomai.games.bang   import PublicPersonInfo
+from roomai.games.bang   import PublicPlayerInfo
 from roomai.games.bang   import PhaseInfo
 
 from roomai.games.bang   import AllCharacterCardsDict
@@ -29,7 +29,6 @@ class BangEnv(AbstractEnv):
         :return: infos, public_state, person_states, private_state
         '''
 
-
         logger         = roomai.get_logger()
         ############ public state and private state ##########
         public_state   = BangStatePublic()
@@ -45,11 +44,11 @@ class BangEnv(AbstractEnv):
             logger.fatal("The number of normal players must be in [2,4,5]")
             raise ValueError("The number of normal players must be in [2,4,5]")
 
-        public_state.__public_person_infos__ = [PublicPersonInfo() for i in range(public_state.__param_num_normal_players__)]
+        public_state.__public_player_infos__ = [PublicPlayerInfo() for i in range(public_state.__param_num_normal_players__)]
         for i in range(public_state.__param_num_normal_players__):
-            public_state.__public_person_infos__[i].__num_hand_cards__ = 0
-            public_state.__public_person_infos__[i].__character_card__ = None
-            public_state.__public_person_infos__[i].__equipment_cards__ = []
+            public_state.__public_player_infos__[i].__num_hand_cards__ = 0
+            public_state.__public_player_infos__[i].__character_card__ = None
+            public_state.__public_player_infos__[i].__equipment_cards__ = []
         public_state.__phase_info__ = PhaseInfo()
         public_state.__phase_info__.__playid__ = public_state.__param_num_normal_players__
         public_state.__phase_info__.__phase__  = PhaseInfo.ChancePlay
@@ -59,9 +58,10 @@ class BangEnv(AbstractEnv):
         person_states = [BangStatePerson() for i in range(public_state.param_num_normal_players+1)]
         for i in range(public_state.param_num_normal_players):
             self.__person_states_history__[i].append(person_states[i])
-            self.__person_states_history__[i][0].__id__         = i
-            self.__person_states_history__[i][0].__hand_cards__ = []
-            self.__person_states_history__[i][0].__role__       = ""
+            person_states[i][0].__id__         = i
+            person_states[i][0].__hand_cards__ = []
+            person_states[i][0].__role__       = None
+            person_states[i][0].__available_actions__ = dict()
 
         person_states[public_state.__param_num_normal_players__][0].__available_actions__ = self.available_actions()
 

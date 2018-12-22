@@ -18,7 +18,13 @@ class PhaseInfo(object):
     phase = property(__get_phase__, doc = "Now the game is in the players[playerid]'s turn's phase. The phases are ChancePlay, Draw, Play, Discard")
 
 
-class PublicPersonInfo(object):
+    def __deepcopy__(self, memodict={}):
+        info = PhaseInfo()
+        info.__playid__ = self.__playid__
+        info.__phase__  = self.__phase__
+        return info
+
+class PublicPlayerInfo(object):
     def __init__(self):
         self.__num_hand_cards__  = 0
         self.__character_card__  = None
@@ -33,18 +39,29 @@ class PublicPersonInfo(object):
     def __get_equipment_cards__(self):  return tuple(self.__equipment_cards__)
     get_equipment_cards = property(__get_equipment_cards__, doc="The equipment cards")
 
+    def __deepcopy__(self, memodict={}):
+        info = PublicPlayerInfo
+        info.__num_hand_cards__ = self.num_hand_cards
+
+        if self.__character_card__ is None:
+            info.__character_card__ = None
+        else:
+            info.__character_card__ = self.__character_card__.__deepcopy__()
+
+        info.__equipment_cards__ = [a.__deepcopy__() for a in self.__equipment_cards__]
+        return info
 
 class BangStatePublic(AbstractStatePublic):
 
     def __init__(self):
-        self.__public_person_infos__  = []
+        self.__public_player_infos__  = []
         self.__phase_info__           = PhaseInfo()
         self.__sheriff_id__           = -1
         self.__discard_pile__         = []
 
 
-    def __get_public_person_infos__(self):   return tuple(self.__public_person_infos__)
-    public_person_infos = property(__get_public_person_infos__, doc="The person info in public")
+    def __get_public_player_infos__(self):   return tuple(self.__public_player_infos__)
+    public_player_infos = property(__get_public_player_infos__, doc="The player info in public")
 
     def __get_phase_info__(self):   return self.__phase_info__
     phase_info = property(__get_phase_info__, doc="The phase info indicates in which phase is the game")

@@ -8,6 +8,7 @@ from roomai.games.bang import CharacterCardNames
 import roomai
 
 
+AllBangActionsDict = dict()
 
 class Bart_Cassidy_BangAction(AbstractAction):
     '''
@@ -310,35 +311,31 @@ class BangAction(AbstractAction):
     def __get_card__(self): return self.__card__
     card = property(__get_card__, doc="the card used in this action")
 
-
-
-    def __get_source__(self): return self.__source__
-    source = property(__get_source__, doc="the id of the player, who issues this action")
-
     def __get_first_target__(self): return self.__first_target__
     first_target = property(__get_first_target__,doc = "the first target of this action")
 
     def __get_second_target__(self): return self.__second_target__
     second_target = property(__get_second_target__, doc = "the second target of this action")
 
-
-
-AllBangActionsDict = dict()
+### add all playing cards
 for playingcard in AllPlayingCardsDict:
     if playingcard.name == PlayingCardNames.Duello:
+        AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
+    elif playingcard.name == PlayingCardNames.Bang:
+        AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
+        for i in range(5):
+            AllBangActionsDict[playingcard.key] = BangAction(playingcard.key+"-%d"%(i))
+    elif playingcard.name == PlayingCardNames.StageCoach:
+        AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
+    elif playingcard.name == PlayingCardNames.Indian:
+        AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
+    elif playingcard.name == PlayingCardNames.Miss:
+        AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
 
-        AllPlayingCardsDict[playingcard.key] = action
-
-    elif card.name == PlayingCardNames.Carabine:
-        pass
-    elif card.name == PlayingCardNames.Bang:
-        pass
     elif card.name == PlayingCardNames.Emporia:
         pass
-    elif card.name == PlayingCardNames.Volcanic:
-        pass
-    elif card.name == PlayingCardNames.Schofield:
-        pass
+
+
     elif card.name == PlayingCardNames.Remington:
         pass
     elif card.name == PlayingCardNames.Panic:
@@ -357,17 +354,24 @@ for playingcard in AllPlayingCardsDict:
         pass
     elif card.name == PlayingCardNames.CatBalou:
         pass
-    elif card.name == PlayingCardNames.Miss:
-        pass
+
     elif card.name == PlayingCardNames.StageCoach:
         pass
     elif card.name == PlayingCardNames.Barrel:
         pass
-    elif card.name == PlayingCardNames.Mustang:
-        pass
-    elif card.name == PlayingCardNames.Indian:
-        pass
-    elif card.name == PlayingCardNames.Winchester:
-        pass
-    elif card.name == PlayingCardNames.Appaloosa:
-        pass
+
+
+
+    elif playingcard.name == PlayingCardNames.Mustang: #horse
+        AllBangActionsDict[playingcard.key] =  BangAction(playingcard.key)
+    elif playingcard.name == PlayingCardNames.Appaloosa: ## horse
+        AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
+
+    elif playingcard.name == PlayingCardNames.Volcanic: ## guns
+        AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
+    elif playingcard.name == PlayingCardNames.Schofield: ## guns
+        AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
+    elif playingcard.name == PlayingCardNames.Carabine: #guns
+        AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
+    elif playingcard.name == PlayingCardNames.Winchester: #guns
+        AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
