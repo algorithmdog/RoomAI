@@ -104,7 +104,7 @@ class BangEnv(AbstractEnv):
 
         if action.type == BangActionChance.BangActionChanceType.normalcard:  # chance player shuffle cards
             if len(private_state.library) == 0:  # there is no card, and the chance player needs to shuffle discard cards
-                private_state.__library__ = public_state.__discard_pile__
+                private_state.__library__ = copy(public_state.__discard_pile__)
 
         person_states[public_state.turn].__available_actions__ = dict()
         public_state.__turn__ = (public_state.turn + 1) % 2
