@@ -5,15 +5,15 @@ from roomai.games.common import AbstractStatePublic
 class PublicPersonInfo(object):
     def __init__(self):
         self.__num_hand_cards__  = 0
-        self.__charactor_card__  = None
+        self.__character_card__  = None
         self.__equipment_cards__ = []
         self.__role_card__       = None
 
     def __get_num_hand_cards__(self):   return self.__num_hand_cards__
     num_hand_cards = property(__get_num_hand_cards__,doc="The number of hand cards")
 
-    def __get_charactor_card__(self):   return self.__charactor_card__
-    charactor_card = property(__get_charactor_card__, doc="The charactorcard normalcard")
+    def __get_character_card__(self):   return self.__character_card__
+    character_card = property(__get_character_card__, doc="The charactercard normalcard")
 
     def __get_equipment_cards__(self):  return tuple(self.__equipment_cards__)
     get_equipment_cards = property(__get_equipment_cards__, doc="The equipment cards")
