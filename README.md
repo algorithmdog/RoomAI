@@ -9,7 +9,6 @@
 RoomAI is a toolkit for developing AI-bots of KuhnPoker, Texas Holdem and Bang!.
 
 
-
 # Install and Get Started
 
 You can install roomai with pip
@@ -18,7 +17,7 @@ You can install roomai with pip
 pip install roomai
 </pre>
 
-Try your first RoomAI program
+Try your first AI-bot
 
 
 <pre>
