@@ -11,8 +11,8 @@ Subpackages
 Submodules
 ----------
 
-roomai\.Utils module
---------------------
+roomai.Utils module
+-------------------
 
 .. automodule:: roomai.Utils
     :members:

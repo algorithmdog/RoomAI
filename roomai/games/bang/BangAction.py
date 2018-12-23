@@ -38,7 +38,6 @@ class BangAction(AbstractAction):
 
         self.__card__            = None
         self.__card_targets__    = []
-        self.__second_targets__   = []
 
         self.__other__           = None
         self.__other_targets__     = []
@@ -80,6 +79,7 @@ class BangAction(AbstractAction):
     def __get_type__(self): return self.__type__
     type = property(__get_type__, doc="the type of the bang action is %s or %s"%(BangActionType.card, BangActionType.skill))
 
+    ## about skill
     def __get_skill__(self):    return self.__skill__
     skill = property(__get_skill__, doc="the skill used in this %s action"%(BangActionType.skill))
 
