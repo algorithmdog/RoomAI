@@ -83,35 +83,40 @@ class BangEnv(AbstractEnv):
         private_state = copy.deepcopy(self.__private_state_history__[-1])
         public_state = copy.deepcopy(self.__public_state_history__[-1])
         person_states = [copy.deepcopy(self.__person_states_history__[i][-1]) for i in range(public_state.param_num_normal_players)]
+        person_states[public_state.turn].__available_actions__ = dict()
 
         self.__public_state_history__.append(public_state)
         self.__private_state_history__.append(private_state)
         for i in range(len(person_states)):
             self.__person_states_history__[i].append(person_states[i])
 
-        if action.type == BangActionChance.BangActionChanceType.charactercard:  # chance player deals character cards
-            person_states[public_state.turn].__available_actions__ = self.available_actions()
-            for i in range(len(public_state.__public_person_infos__)):
-                if public_state.__public_person_infos__[i].__character_card is None:  # sample a character card to that player
-                    public_state.__public_person_infos__[i].__character_card = \
-                        person_states[public_state.turn].__available_actions__[choice(person_states[public_state.turn].__available_actions__.keys)]
-                    return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
-            # if all players have been assigned a character, return
-            return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
+        if isinstance(action, BangActionChance) == True:
+            if action.type == BangActionChance.BangActionChanceType.charactercard:  # chance player deals character cards
+                person_states[public_state.turn].__available_actions__ = self.available_actions()
+                for i in range(len(public_state.__public_person_infos__)):
+                    if public_state.__public_person_infos__[i].__character_card is None:  # sample a character card to that player
+                        public_state.__public_person_infos__[i].__character_card = \
+                            person_states[public_state.turn].__available_actions__[choice(person_states[public_state.turn].__available_actions__.keys)]
+                        return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
+                # if all players have been assigned a character, return
+                return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
 
-        if action.type == BangActionChance.BangActionChanceType.rolecard: # chance player deals role cards
-            person_states[public_state.turn].__available_actions__ = self.available_actions()
-            for i in range(public_state.param_num_normal_players):
-                if person_states[i].__role__ is None:  # sample a role card to that player
-                    person_states[i].__role__ = person_states[public_state.turn].__available_actions__[choice(person_states[public_state.turn].__available_actions__.keys)]
-                    if person_states[i].__role__ == CardRole.RoleCard(CardRole.RoleCardNames.sheriff):
-                        public_state.__sheriff_id__ = i
+            if action.type == BangActionChance.BangActionChanceType.rolecard: # chance player deals role cards
+                person_states[public_state.turn].__available_actions__ = self.available_actions()
+                for i in range(public_state.param_num_normal_players):
+                    if person_states[i].__role__ is None:  # sample a role card to that player
+                        person_states[i].__role__ = person_states[public_state.turn].__available_actions__[choice(person_states[public_state.turn].__available_actions__.keys)]
+                        if person_states[i].__role__ == CardRole.RoleCard(CardRole.RoleCardNames.sheriff):
+                            public_state.__sheriff_id__ = i
 
-        if action.type == BangActionChance.BangActionChanceType.playingcard:  # chance player shuffle cards
-            if len(private_state.library) == 0:  # there is no card, and the chance player needs to shuffle discard cards
-                private_state.__library__ = copy(public_state.__discard_pile__)
+            if action.type == BangActionChance.BangActionChanceType.playingcard:  # chance player shuffle cards
+                if len(private_state.library) == 0:  # there is no card, and the chance player needs to shuffle discard cards
+                    private_state.__library__ = copy(public_state.__discard_pile__)
 
-        person_states[public_state.turn].__available_actions__ = dict()
+        else:
+            pass
+
+
         public_state.__turn__ = (public_state.turn + 1) % 2
 
     def available_actions(self):
@@ -186,52 +191,6 @@ class BangEnv(AbstractEnv):
                     available_actions[CardRole.RoleCardNames.outlaw] = BangActionChance.lookup(CardRole.RoleCardNames.outlaw)
                 return available_actions
 
-        ##
+
         available_actions = dict()
         turn = self.__public_state_history__[-1].__turn__
-        person_state = self.__person_states_history__[turn][-1]
-        for card in person_state.hand_cards:
-            if card.name == PlayingCardNames.Duello:
-                available_actions[card.key] = Bang
-            elif card.name == PlayingCardNames.Carabine:
-                pass
-            elif card.name == PlayingCardNames.Bang:
-                pass
-            elif card.name == PlayingCardNames.Emporia:
-                pass
-            elif card.name == PlayingCardNames.Volcanic:
-                pass
-            elif card.name == PlayingCardNames.Schofield:
-                pass
-            elif card.name == PlayingCardNames.Remington:
-                pass
-            elif card.name == PlayingCardNames.Panic:
-                pass
-            elif card.name == PlayingCardNames.Dynamite:
-                pass
-            elif card.name == PlayingCardNames.WellsFargo:
-                pass
-            elif card.name == PlayingCardNames.Prigione:
-                pass
-            elif card.name == PlayingCardNames.Saloon:
-                pass
-            elif card.name == PlayingCardNames.Beer:
-                pass
-            elif card.name == PlayingCardNames.Catling:
-                pass
-            elif card.name == PlayingCardNames.CatBalou:
-                pass
-            elif card.name == PlayingCardNames.Miss:
-                pass
-            elif card.name == PlayingCardNames.StageCoach:
-                pass
-            elif card.name == PlayingCardNames.Barrel:
-                pass
-            elif card.name == PlayingCardNames.Mustang:
-                pass
-            elif card.name == PlayingCardNames.Indian:
-                pass
-            elif card.name == PlayingCardNames.Winchester:
-                pass
-            elif card.name == PlayingCardNames.Appaloosa:
-                pass
