@@ -25,6 +25,7 @@ class TexasHoldemActionChance(roomai.games.common.AbstractActionChance):
         super(TexasHoldemActionChance, self).__init__(key)
         self.__key__  = key
         self.__card__ = PokerCard.lookup(key)
+        self.__is_public__ = False
 
     def __get_key__(self):
         return self.__key__

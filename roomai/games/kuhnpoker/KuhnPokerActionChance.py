@@ -22,6 +22,7 @@ class KuhnPokerActionChance(roomai.games.common.AbstractActionChance):
         n1_n2        = key.split(",")
         self.__number_for_player0 = int(n1_n2[0])
         self.__number_for_player1 = int(n1_n2[1])
+        self.__is_public__ = False
 
     def __get_key__(self):
         return self.__key__
@@ -39,6 +40,10 @@ class KuhnPokerActionChance(roomai.games.common.AbstractActionChance):
     def lookup(cls, key):
         return AllKuhnChanceActions[key]
 
+    def mask(self):
+        AllKuhnChanceActions["-1,-1"]
+
+
     def __deepcopy__(self, memodict={}):
         return KuhnPokerActionChance.lookup(self.key)
 
@@ -47,6 +52,7 @@ AllKuhnChanceActions = {"0,1": KuhnPokerActionChance("0,1"), \
                         "0,2": KuhnPokerActionChance("0,2"), \
                         "2,0": KuhnPokerActionChance("2,0"), \
                         "1,2": KuhnPokerActionChance("1,2"), \
-                        "2,1": KuhnPokerActionChance("2,1"), }
+                        "2,1": KuhnPokerActionChance("2,1")}
+
 
 

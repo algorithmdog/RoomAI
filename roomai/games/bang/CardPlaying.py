@@ -13,7 +13,7 @@ class PlayingCardNames:
     Panic       = "Panic"
     Dynamite    = "Dynamite"
     WellsFargo  = "WellsFargo"
-    Prigione    = "Prigione"
+    Prigione    = "Jail"
     Saloon      = "Saloon"
     Beer        = "Beer"
     Catling     = "Catling"
@@ -88,7 +88,6 @@ class PlayingCard(object):
     def __get_key__(self):
         return self.__key__
     key = property(__get_key__, doc="The key of the playing card")
-
 
 
     @classmethod
@@ -196,11 +195,11 @@ AllPlayingCardsDict["%s-K-%s" % (PlayingCardNames.Barrel, PlayingCardSuits.Spade
 AllPlayingCardsDict["%s-A-%s" % (PlayingCardNames.Appaloosa, PlayingCardSuits.Spade)]         = PlayingCard(PlayingCardNames.Appaloosa, "A", PlayingCardSuits.Spade, NormalCardColors.Blue)
 
 
-AllNormalCards = list(AllPlayingCardsDict.values()) + [AllPlayingCardsDict["%s-9-%s" % (PlayingCardNames.StageCoach, PlayingCardSuits.Spade)]]
+ADeckOfCards = list(AllPlayingCardsDict.values()) + [AllPlayingCardsDict["%s-9-%s" % (PlayingCardNames.StageCoach, PlayingCardSuits.Spade)]]
 
 if __name__ == "__main__":
 
-    print (len(AllNormalCards))
+    print (len(ADeckOfCards))
     count = 0
     for c in AllPlayingCardsDict.values():
         if c.color == PlayingCardColors.Blue:

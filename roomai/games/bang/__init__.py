@@ -4,7 +4,7 @@ from roomai.games.bang.CardPlaying import PlayingCard
 from roomai.games.bang.CardPlaying import PlayingCardNames
 from roomai.games.bang.CardPlaying import PlayingCardSuits
 from roomai.games.bang.CardPlaying import AllPlayingCardsDict
-from roomai.games.bang.CardPlaying import AllNormalCards
+from roomai.games.bang.CardPlaying import ADeckOfCards
 
 from roomai.games.bang.CardCharacter import CharacterCardNames
 from roomai.games.bang.CardCharacter import CharacterCard
@@ -16,7 +16,7 @@ from roomai.games.bang.CardRole import AllRoleCardsDict
 
 from roomai.games.bang.BangAction import AllBangActionsDict
 from roomai.games.bang.BangAction import Bart_Cassidy_BangAction
-from roomai.games.bang.BangAction import Black_Jack_SkillActon
+from roomai.games.bang.BangAction import Black_Jack_SkillAction
 from roomai.games.bang.BangAction import Calamity_Janet_BangAction
 from roomai.games.bang.BangAction import EI_Gringo_BangAction
 from roomai.games.bang.BangAction import Jesse_Jones_BangAction

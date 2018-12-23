@@ -29,6 +29,7 @@ class PublicPlayerInfo(object):
         self.__num_hand_cards__  = 0
         self.__character_card__  = None
         self.__equipment_cards__ = []
+        self.__is_alive__         = True
 
     def __get_num_hand_cards__(self):   return self.__num_hand_cards__
     num_hand_cards = property(__get_num_hand_cards__,doc="The number of hand cards")
@@ -38,6 +39,9 @@ class PublicPlayerInfo(object):
 
     def __get_equipment_cards__(self):  return tuple(self.__equipment_cards__)
     get_equipment_cards = property(__get_equipment_cards__, doc="The equipment cards")
+
+    def __get_is_alive__(self):  return self.__is_alive__
+    is_alive = property(__get_is_alive__, doc="Whether does the corresponding player live")
 
     def __deepcopy__(self, memodict={}):
         info = PublicPlayerInfo
@@ -58,6 +62,7 @@ class BangStatePublic(AbstractStatePublic):
         self.__phase_info__           = PhaseInfo()
         self.__sheriff_id__           = -1
         self.__discard_pile__         = []
+        self.__emporia_pile__         = []
 
 
     def __get_public_player_infos__(self):   return tuple(self.__public_player_infos__)
