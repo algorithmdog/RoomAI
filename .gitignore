@@ -8,3 +8,4 @@ _build
 RoomAI.egg-info/*
 dist/*
 roomai.egg-info/*
+checkpoint
