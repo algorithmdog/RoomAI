@@ -17,7 +17,7 @@ You can install roomai with pip
 pip install roomai
 </pre>
 
-now,try your first AI-bot
+try your first AI-bot
 
 
 <pre>
