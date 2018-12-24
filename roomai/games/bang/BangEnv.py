@@ -33,7 +33,7 @@ class BangEnv(AbstractEnv):
         param_num_normal_players: how many players are in the game, the option must be in {2, 4, 5}, default 5. An example of the initialization param is {"param_num_normal_players":2} \n
         
         :param params: the initialization params
-        :return: infos, public_state, person_states, private_state
+        :return: infos, public_state_history, person_states_history, private_state_history, playerid_action_history
         '''
 
         logger         = roomai.get_logger()
@@ -84,8 +84,10 @@ class BangEnv(AbstractEnv):
         The Bang game environment steps with the action taken by the current player
 
         :param action
-        :returns:infos, public_state, person_states, private_state
+        :returns:infos, public_state_history, person_states_history, private_state_history, playerid_action_history
         """
+
+        logger = roomai.get_logger()
         private_state = copy.deepcopy(self.__private_state_history__[-1])
         public_state = copy.deepcopy(self.__public_state_history__[-1])
         person_states = [copy.deepcopy(self.__person_states_history__[i][-1]) for i in range(public_state.param_num_normal_players)]
@@ -120,10 +122,46 @@ class BangEnv(AbstractEnv):
                     private_state.__library__ = copy(public_state.__discard_pile__)
 
         else:
-            pass
+
+            if len(self.__public_state_history__[-1].response_infos_stack) > 0:
+                response_action = self.__public_state_history__[-1].response_infos_stack[-1].action
+                if isinstance(response_action,BangAction) == True \
+                        and response_action.type == BangActionType.card \
+                        and response_action.card.name == PlayingCardNames.Indian:
+                    if action.type == BangActionType.other and action.other == OtherActionNames.giveup:
+                        person_states[public_state.__turn__].__hp__ -= 1
+
+                    elif action.type == BangActionType.card and action.card.name == PlayingCardNames.Bang:
+                        person_states.__hand_cards__.remove(action.card)
+                        new_turn = (public_state.turn + 1) % (public_state.param_num_normal_players)
+
+                        public_state.__turn__ = (public_state.turn + 1) % public_state.param_num_normal_players
+
+                    else:
+                        logger.fatal("BangEnv generates %s action for responding Indian"%(action.key))
+                        raise Exception("BangEnv generates %s action for responding Indian"%(action.key))
 
 
-        public_state.__turn__ = (public_state.turn + 1) % 2
+
+                elif isinstance(response_action,BangAction) == True \
+                        and response_action.type == BangActionType.card \
+                        and response_action.card.name == PlayingCardNames.Catling:
+
+                    if action.type == BangActionType.other and action.other == OtherActionNames.giveup:
+                        person_states[public_state.__turn__].__hp__ -= 1
+
+                    elif action.type == BangActionType.card and action.card.name == PlayingCardNames.Miss:
+                        person_states.__hand_cards__.remove(action.card)
+                        new_turn = (public_state.turn + 1) % (public_state.param_num_normal_players)
+
+                        public_state.__turn__ = (public_state.turn + 1) % public_state.param_num_normal_players
+
+
+                    else:
+                        logger.fatal("BangEnv generates %s action for responding Indian" % (action.key))
+                        raise Exception("BangEnv generates %s action for responding Indian" % (action.key))
+
+
 
     def available_actions(self):
         '''
@@ -198,12 +236,15 @@ class BangEnv(AbstractEnv):
                     available_actions[CardRole.RoleCardNames.outlaw] = BangActionChance.lookup(CardRole.RoleCardNames.outlaw)
                 return available_actions
 
+
         ####################################### action ####################################
         turn = self.__public_state_history__[-1].turn
         tmp_set = dict()
         if len(self.__public_state_history__[-1].response_infos_stack) > 0:
             response_action = self.__public_state_history__[-1].response_infos_stack[-1].action
-            if isinstance(response_action,BangAction) == True and response_action.type == BangActionType.card and response_action.card.name == PlayingCardNames.Indian:
+            if isinstance(response_action,BangAction) == True \
+                    and response_action.type == BangActionType.card \
+                    and response_action.card.name == PlayingCardNames.Indian:
                 person_state = self.__person_states_history__[turn][-1]
                 for card in person_state.hand_cards:
                     if  card.name == PlayingCardNames.Bang:
@@ -211,7 +252,9 @@ class BangEnv(AbstractEnv):
                 tmp_set[OtherActionNames.giveup] = BangAction.lookup(OtherActionNames.giveup)
                 return tmp_set
 
-            elif isinstance(response_action, BangAction) == True and response_action.type == BangActionType.card and response_action.card.name == PlayingCardNames.Catling:
+            elif isinstance(response_action, BangAction) == True \
+                    and response_action.type == BangActionType.card \
+                    and response_action.card.name == PlayingCardNames.Catling:
                 person_state = self.__person_states_history__[turn][-1]
                 for card in person_state.hand_cards:
                     if  card.name == PlayingCardNames.Miss:
