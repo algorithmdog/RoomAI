@@ -24,7 +24,7 @@ class OtherActionNames:
 class BangAction(AbstractAction):
     '''
     BangAction is the action played by the normal players \n\n
-    The action key looks like "cardkey_firsttarget(option)_secondtarget(option)" or "charactername_seencards1:seencard2(option)_choosecard1:choosecard1(option)" or "otheraction_othertarget(option)"
+    The action key looks like "cardkey_firsttarget1:firsttarget2(option)_secondtarget1:secondtarget2(option)" or "charactername_seencards1:seencard2(option)_choosecard1:choosecard1(option)" or "otheraction_othertarget(option)"
     
     '''
     def __init__(self, key):
@@ -40,7 +40,7 @@ class BangAction(AbstractAction):
         self.__card_targets__    = []
 
         self.__other__           = None
-        self.__other_targets__     = []
+        self.__other_targets__   = []
 
         keys = key.split("_")
         if keys[0] in AllPlayingCardsDict:
@@ -50,11 +50,8 @@ class BangAction(AbstractAction):
 
     @classmethod
     def lookup(self, key):
-        raise NotImplementedError
+       return AllBangActionsDict[key]
 
-
-    def mask(self):
-        raise NotImplementedError
 
     def __deepcopy__(self, memodict={}):
         a = BangAction()
@@ -187,11 +184,11 @@ for i in range(len(ADeckOfCards)):
 
 ###################### add all card actions  ##########################
 for playingcard in AllPlayingCardsDict:
-    if playingcard.name == PlayingCardNames.Duello:
+    if playingcard.name == PlayingCardNames.Duello: #决斗
         for i in range(5):
             AllBangActionsDict[playingcard.key+"-%d"%(i)] = BangAction(playingcard.key+"-%d"%(i))
             AllBangActionsDict[playingcard.key + "-%d" % (i)].__is_public__ = True
-    elif playingcard.name == PlayingCardNames.Bang:
+    elif playingcard.name == PlayingCardNames.Bang: # 杀
         AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
         AllBangActionsDict[playingcard.key].__is_public__ = True
         for i in range(5):
@@ -203,7 +200,7 @@ for playingcard in AllPlayingCardsDict:
     elif playingcard.name == PlayingCardNames.Indian: ##   南蛮入侵
         AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
         AllBangActionsDict[playingcard.key].__is_public__ = True
-    elif playingcard.name == PlayingCardNames.Miss:
+    elif playingcard.name == PlayingCardNames.Miss: ## 闪
         AllBangActionsDict[playingcard.key] = BangAction(playingcard.key)
         AllBangActionsDict[playingcard.key].__is_public__ = True
     elif playingcard.name == PlayingCardNames.Panic: ## 顺手牵羊

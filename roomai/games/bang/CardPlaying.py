@@ -13,7 +13,7 @@ class PlayingCardNames:
     Panic       = "Panic"
     Dynamite    = "Dynamite"
     WellsFargo  = "WellsFargo"
-    Prigione    = "Jail"
+    Jail        = "Jail"
     Saloon      = "Saloon"
     Beer        = "Beer"
     Catling     = "Catling"
@@ -127,7 +127,7 @@ AllPlayingCardsDict["%s-K-%s" % (PlayingCardNames.Remington, PlayingCardSuits.Cl
 AllPlayingCardsDict["%s-A-%s" % (PlayingCardNames.Panic, PlayingCardSuits.Heart)]          = PlayingCard(PlayingCardNames.Panic, "A", PlayingCardSuits.Heart, NormalCardColors.Brown)
 AllPlayingCardsDict["%s-2-%s" % (PlayingCardNames.Dynamite, PlayingCardSuits.Heart)]       = PlayingCard(PlayingCardNames.Dynamite, "2", PlayingCardSuits.Heart, NormalCardColors.Blue)
 AllPlayingCardsDict["%s-3-%s" % (PlayingCardNames.WellsFargo, PlayingCardSuits.Heart)]     = PlayingCard(PlayingCardNames.WellsFargo, "3", PlayingCardSuits.Heart, NormalCardColors.Brown)
-AllPlayingCardsDict["%s-4-%s" % (PlayingCardNames.Prigione, PlayingCardSuits.Heart)]       = PlayingCard(PlayingCardNames.Prigione, "4", PlayingCardSuits.Heart, NormalCardColors.Blue)
+AllPlayingCardsDict["%s-4-%s" % (PlayingCardNames.Jail, PlayingCardSuits.Heart)]       = PlayingCard(PlayingCardNames.Jail, "4", PlayingCardSuits.Heart, NormalCardColors.Blue)
 AllPlayingCardsDict["%s-5-%s" % (PlayingCardNames.Saloon, PlayingCardSuits.Heart)]         = PlayingCard(PlayingCardNames.Saloon, "5", PlayingCardSuits.Heart, NormalCardColors.Brown)
 for i in range(6,10):
     AllPlayingCardsDict["%s-%d-%s" % (PlayingCardNames.Beer, i, PlayingCardSuits.Heart)]  = PlayingCard(PlayingCardNames.Beer, "%d" % (i), PlayingCardSuits.Heart, NormalCardColors.Brown)
@@ -142,8 +142,8 @@ AllPlayingCardsDict["%s-A-%s" % (PlayingCardNames.Bang, PlayingCardSuits.Spade)]
 for i in range(2,9):
     AllPlayingCardsDict["%s-%d-%s" % (PlayingCardNames.Miss, i, PlayingCardSuits.Spade)]  = PlayingCard(PlayingCardNames.Miss, "%d" % (i), PlayingCardSuits.Spade, NormalCardColors.Brown)
 AllPlayingCardsDict["%s-9-%s" % (PlayingCardNames.StageCoach, PlayingCardSuits.Spade)]     = PlayingCard(PlayingCardNames.StageCoach, "9", PlayingCardSuits.Spade, NormalCardColors.Brown)
-AllPlayingCardsDict["%s-10-%s" % (PlayingCardNames.Prigione, PlayingCardSuits.Spade)]      = PlayingCard(PlayingCardNames.Prigione, "10", PlayingCardSuits.Spade, NormalCardColors.Blue)
-AllPlayingCardsDict["%s-J-%s" % (PlayingCardNames.Prigione, PlayingCardSuits.Spade)]       = PlayingCard(PlayingCardNames.Prigione, "J", PlayingCardSuits.Spade, NormalCardColors.Blue)
+AllPlayingCardsDict["%s-10-%s" % (PlayingCardNames.Jail, PlayingCardSuits.Spade)]      = PlayingCard(PlayingCardNames.Jail, "10", PlayingCardSuits.Spade, NormalCardColors.Blue)
+AllPlayingCardsDict["%s-J-%s" % (PlayingCardNames.Jail, PlayingCardSuits.Spade)]       = PlayingCard(PlayingCardNames.Jail, "J", PlayingCardSuits.Spade, NormalCardColors.Blue)
 AllPlayingCardsDict["%s-Q-%s" % (PlayingCardNames.Barrel, PlayingCardSuits.Spade)]       = PlayingCard(PlayingCardNames.Barrel, "Q", PlayingCardSuits.Spade, NormalCardColors.Brown)
 AllPlayingCardsDict["%s-K-%s" % (PlayingCardNames.Schofield, PlayingCardSuits.Spade)]       = PlayingCard(PlayingCardNames.Schofield, "K", PlayingCardSuits.Spade, NormalCardColors.Blue)
 

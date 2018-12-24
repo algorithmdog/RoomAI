@@ -7,15 +7,21 @@ from random import choice
 import roomai
 from roomai.games.common import AbstractEnv
 from roomai.games.bang   import BangActionChance
+from roomai.games.bang   import BangAction
+from roomai.games.bang   import BangActionType
+from roomai.games.bang   import OtherActionNames
+
 from roomai.games.bang   import BangStatePublic
 from roomai.games.bang   import BangStatePrivate
 from roomai.games.bang   import BangStatePerson
 from roomai.games.bang   import PublicPlayerInfo
 from roomai.games.bang   import PhaseInfo
 
+
 from roomai.games.bang   import AllCharacterCardsDict
 from roomai.games.bang   import PlayingCardNames
 from roomai.games.bang   import CardRole
+
 
 class BangEnv(AbstractEnv):
 
@@ -126,8 +132,9 @@ class BangEnv(AbstractEnv):
         :return: all valid actions
         '''
         logger = roomai.get_logger()
-        ## charactercard
 
+        ######################################   chance action  #################################
+        ## charactercard
         if self.__public_state_history__[-1].__public_person_infos__[-1].__character_card__ is None:
             available_actions = dict()
             tmp_set = set()
@@ -191,6 +198,23 @@ class BangEnv(AbstractEnv):
                     available_actions[CardRole.RoleCardNames.outlaw] = BangActionChance.lookup(CardRole.RoleCardNames.outlaw)
                 return available_actions
 
+        ####################################### action ####################################
+        turn = self.__public_state_history__[-1].turn
+        tmp_set = dict()
+        if len(self.__public_state_history__[-1].response_infos_stack) > 0:
+            response_action = self.__public_state_history__[-1].response_infos_stack[-1].action
+            if isinstance(response_action,BangAction) == True and response_action.type == BangActionType.card and response_action.card.name == PlayingCardNames.Indian:
+                person_state = self.__person_states_history__[turn][-1]
+                for card in person_state.hand_cards:
+                    if  card.name == PlayingCardNames.Bang:
+                        tmp_set[card.name] = BangAction.lookup(card.name)
+                tmp_set[OtherActionNames.giveup] = BangAction.lookup(OtherActionNames.giveup)
+                return tmp_set
 
-        available_actions = dict()
-        turn = self.__public_state_history__[-1].__turn__
+            elif isinstance(response_action, BangAction) == True and response_action.type == BangActionType.card and response_action.card.name == PlayingCardNames.Catling:
+                person_state = self.__person_states_history__[turn][-1]
+                for card in person_state.hand_cards:
+                    if  card.name == PlayingCardNames.Miss:
+                        tmp_set[card.name] = BangAction.lookup(card.name)
+                    tmp_set[OtherActionNames.giveup] = BangAction.lookup(OtherActionNames.giveup)
+                    return tmp_set

@@ -78,12 +78,12 @@ class ResponseInfo(object):
 class BangStatePublic(AbstractStatePublic):
 
     def __init__(self):
-        self.__public_player_infos__  = []
-        self.__phase_info__           = PhaseInfo()
-        self.__response_info_stack__  = []
-        self.__sheriff_id__           = -1
-        self.__discard_pile__         = []
-        self.__emporia_pile__         = []
+        self.__public_player_infos__   = []
+        self.__phase_info__            = PhaseInfo()
+        self.__response_infos_stack__  = []
+        self.__sheriff_id__            = -1
+        self.__discard_pile__          = []
+        self.__emporia_pile__          = []
 
 
     def __get_public_player_infos__(self):   return tuple(self.__public_player_infos__)
@@ -92,8 +92,8 @@ class BangStatePublic(AbstractStatePublic):
     def __get_phase_info__(self):   return self.__phase_info__
     phase_info = property(__get_phase_info__, doc="The phase info indicates in which phase is the game")
 
-    def __get_response_info_stack__(self):  return tuple(self.__response_info_stack__)
-    response_info_stack = property(__get_response_info_stack__, doc="The response info indicates who and whos action is the players[turn] response to")
+    def __get_response_infos_stack__(self):  return tuple(self.__response_infos_stack__)
+    response_infos_stack = property(__get_response_infos_stack__, doc="The response info indicates who and whos action is the players[turn] response to")
 
     def __get_sheriff_id__(self):   return self.__sheriff_id__
     sheriff_id = property(__get_sheriff_id__, doc="The id of the sheriff")
