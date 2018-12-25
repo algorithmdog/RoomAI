@@ -59,5 +59,11 @@ class BangActionChance(AbstractActionChance):
     def __deepcopy__(self, memodict={}):
         return AllBangActionChancesDict[self.__key__]
 
-AllBangActionChancesDict = dict()
 
+AllBangActionChancesDict = dict()
+for key, value in AllPlayingCardsDict.items():
+    AllBangActionChancesDict[key] = value
+for key, value in AllCharacterCardsDict.items():
+    AllBangActionChancesDict[key] = value
+for key, value in AllRoleCardsDict.items():
+    AllBangActionChancesDict[key] = value

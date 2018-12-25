@@ -4,8 +4,12 @@ from roomai.games.common import AbstractStatePrivate
 
 class BangStatePrivate(AbstractStatePrivate):
     def __init__(self):
-        self.__library__        = []
+        self.__deck__        = []
+        self.__deal_cards__   = []
 
-    def __get_library__(self):  return tuple(self.__library__)
-    library = property(__get_library__, doc="the library of this game")
+    def __get_deck__(self):  return tuple(self.__deck__)
+    deck = property(__get_deck__, doc="the deck of this game")
+
+    def __get_deal_cards__(self):  return tuple(self.__deal_cards__)
+    deal_cards = property(__get_deal_cards__, doc="the dealed cards of this game")
 

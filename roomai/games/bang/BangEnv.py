@@ -84,27 +84,42 @@ class BangEnv(AbstractEnv):
         for i in range(len(person_states)):
             self.__person_states_history__[i].append(person_states[i])
 
-        if action.type == BangActionChance.BangActionChanceType.charactercard:  # chance player deals character cards
-            person_states[public_state.turn].__available_actions__ = self.available_actions()
-            for i in range(len(public_state.__public_person_infos__)):
-                if public_state.__public_person_infos__[i].__character_card is None:  # sample a character card to that player
-                    public_state.__public_person_infos__[i].__character_card = \
-                        person_states[public_state.turn].__available_actions__[choice(person_states[public_state.turn].__available_actions__.keys)]
-                    return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
-            # if all players have been assigned a character, return
-            return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
+        if isinstance(action, BangActionChance) == True:
+            if action.type == BangActionChance.BangActionChanceType.charactercard:  # chance player deals character cards
+                person_states[public_state.turn].__available_actions__ = self.available_actions()
+                for i in range(len(public_state.__public_person_infos__)):
+                    if public_state.__public_person_infos__[i].__character_card is None:  # sample a character card to that player
+                        public_state.__public_person_infos__[i].__character_card = \
+                            person_states[public_state.turn].__available_actions__[choice(person_states[public_state.turn].__available_actions__.keys)]
+                        public_state.__turn__ = (public_state.turn - 1) % public_state.param_num_normal_players
+                        return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
+                # if all players have been assigned a character, return
+                public_state.__turn__ = (public_state.turn - 1) % public_state.param_num_normal_players
+                return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
 
-        if action.type == BangActionChance.BangActionChanceType.rolecard: # chance player deals role cards
-            person_states[public_state.turn].__available_actions__ = self.available_actions()
-            for i in range(public_state.param_num_normal_players):
-                if person_states[i].__role__ is None:  # sample a role card to that player
-                    person_states[i].__role__ = person_states[public_state.turn].__available_actions__[choice(person_states[public_state.turn].__available_actions__.keys)]
-                    if person_states[i].__role__ == CardRole.RoleCard(CardRole.RoleCardNames.sheriff):
-                        public_state.__sheriff_id__ = i
+            if action.type == BangActionChance.BangActionChanceType.rolecard: # chance player deals role cards
+                person_states[public_state.turn].__available_actions__ = self.available_actions()
+                for i in range(public_state.param_num_normal_players):
+                    if person_states[i].__role__ is None:  # sample a role card to that player
+                        person_states[i].__role__ = person_states[public_state.turn].__available_actions__[choice(person_states[public_state.turn].__available_actions__.keys)]
+                        public_state.__turn__ = (public_state.turn - 1) % public_state.param_num_normal_players
+                        if person_states[i].__role__ == CardRole.RoleCard(CardRole.RoleCardNames.sheriff):
+                            public_state.__sheriff_id__ = i
+                        return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
+                public_state.__turn__ = (public_state.turn - 1) % public_state.param_num_normal_players
+                return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
 
-        if action.type == BangActionChance.BangActionChanceType.normalcard:  # chance player shuffle cards
-            if len(private_state.library) == 0:  # there is no card, and the chance player needs to shuffle discard cards
-                private_state.__library__ = copy(public_state.__discard_pile__)
+            if action.type == BangActionChance.BangActionChanceType.normalcard:  # chance player deals/shuffles cards
+                person_states[public_state.turn].__available_actions__ = self.available_actions()
+
+                private_state.__deal_cards__.append(action)
+                private_state.__deck__.pop(action.key)
+                if len(private_state.__deck__) == 0:
+                    # there is no card, then the chance player needs to shuffle discard cards
+                    private_state.__deck__ = public_state.__discard_pile__[:]
+                    public_state.__discard_pile__ = []
+                public_state.__turn__ = (public_state.turn - 1) % public_state.param_num_normal_players
+                return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
 
         person_states[public_state.turn].__available_actions__ = dict()
         public_state.__turn__ = (public_state.turn + 1) % 2
@@ -180,6 +195,11 @@ class BangEnv(AbstractEnv):
                 if num_outlaw > 0:
                     available_actions[CardRole.RoleCardNames.outlaw] = BangActionChance.lookup(CardRole.RoleCardNames.outlaw)
                 return available_actions
+
+        ## deal cards
+        available_actions = dict()
+        for card in self.__private_state_history__.deck:
+            available_actions[card.key] = card
 
         ##
         available_actions = dict()

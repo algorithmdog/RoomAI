@@ -17,9 +17,6 @@ class PublicPersonInfo(object):
     def __get_equipment_cards__(self):  return tuple(self.__equipment_cards__)
     get_equipment_cards = property(__get_equipment_cards__, doc="The equipment cards")
 
-    def __get_role_card__(self): return self.__role_card__
-    role_card = property(__get_role_card__, doc="rolecard normalcard")
-
 
 
 class BangStatePublic(AbstractStatePublic):
