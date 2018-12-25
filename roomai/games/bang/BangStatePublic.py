@@ -18,7 +18,6 @@ class PublicPersonInfo(object):
     get_equipment_cards = property(__get_equipment_cards__, doc="The equipment cards")
 
 
-
 class BangStatePublic(AbstractStatePublic):
 
     def __init__(self):

@@ -6,6 +6,7 @@ import roomai.games.common.ActionRecord
 import roomai.games.kuhnpoker.KuhnPokerActionChance
 import roomai.games.kuhnpoker.KuhnPokerAction
 import roomai.games.common
+
 logger = roomai.get_logger()
 
 
@@ -179,7 +180,7 @@ class KuhnPokerEnv(roomai.games.common.AbstractEnv):
         '''
 
         if len(self.__playerid_action_history__) == 1:
-            return roomai.games.kuhnpoker.AllKuhnChanceActions
+            return AllKuhnChanceActions
         return roomai.games.kuhnpoker.AllKuhnActions
 
     def __higher_number_player__(self):

@@ -13,7 +13,7 @@ class PlayingCardNames:
     Panic       = "Panic"
     Dynamite    = "Dynamite"
     WellsFargo  = "WellsFargo"
-    Prigione    = "Prigione"
+    Jail        = "Jail"
     Saloon      = "Saloon"
     Beer        = "Beer"
     Catling     = "Catling"
@@ -90,7 +90,6 @@ class PlayingCard(object):
     key = property(__get_key__, doc="The key of the playing card")
 
 
-
     @classmethod
     def lookup(cls, key):
         '''
@@ -130,6 +129,7 @@ AllPlayingCardsDict["%s-2-%s" % (PlayingCardNames.Dynamite, PlayingCardSuits.Hea
 AllPlayingCardsDict["%s-3-%s" % (PlayingCardNames.WellsFargo, PlayingCardSuits.Heart)]     = PlayingCard(PlayingCardNames.WellsFargo, "3", PlayingCardSuits.Heart, PlayingCardColors.Brown)
 AllPlayingCardsDict["%s-4-%s" % (PlayingCardNames.Prigione, PlayingCardSuits.Heart)]       = PlayingCard(PlayingCardNames.Prigione, "4", PlayingCardSuits.Heart, PlayingCardColors.Blue)
 AllPlayingCardsDict["%s-5-%s" % (PlayingCardNames.Saloon, PlayingCardSuits.Heart)]         = PlayingCard(PlayingCardNames.Saloon, "5", PlayingCardSuits.Heart, PlayingCardColors.Brown)
+
 for i in range(6,10):
     AllPlayingCardsDict["%s-%d-%s" % (PlayingCardNames.Beer, i, PlayingCardSuits.Heart)]  = PlayingCard(PlayingCardNames.Beer, "%d" % (i), PlayingCardSuits.Heart, PlayingCardColors.Brown)
 AllPlayingCardsDict["%s-10-%s" % (PlayingCardNames.Catling, PlayingCardSuits.Heart)]       = PlayingCard(PlayingCardNames.Catling, "10", PlayingCardSuits.Heart, PlayingCardColors.Brown)
@@ -196,11 +196,11 @@ AllPlayingCardsDict["%s-K-%s" % (PlayingCardNames.Barrel, PlayingCardSuits.Spade
 AllPlayingCardsDict["%s-A-%s" % (PlayingCardNames.Appaloosa, PlayingCardSuits.Spade)]         = PlayingCard(PlayingCardNames.Appaloosa, "A", PlayingCardSuits.Spade, PlayingCardColors.Blue)
 
 
-AllNormalCards = list(AllPlayingCardsDict.values()) + [AllPlayingCardsDict["%s-9-%s" % (PlayingCardNames.StageCoach, PlayingCardSuits.Spade)]]
+ADeckOfCards = list(AllPlayingCardsDict.values()) + [AllPlayingCardsDict["%s-9-%s" % (PlayingCardNames.StageCoach, PlayingCardSuits.Spade)]]
 
 if __name__ == "__main__":
 
-    print (len(AllNormalCards))
+    print (len(ADeckOfCards))
     count = 0
     for c in AllPlayingCardsDict.values():
         if c.color == PlayingCardColors.Blue:

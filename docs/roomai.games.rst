@@ -1,5 +1,5 @@
-roomai\.games package
-=====================
+roomai.games package
+====================
 
 Subpackages
 -----------
@@ -8,6 +8,7 @@ Subpackages
 
     roomai.games.bang
     roomai.games.common
+    roomai.games.kuhnpoker
     roomai.games.texasholdem
 
 Module contents

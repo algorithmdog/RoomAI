@@ -14,14 +14,15 @@ import roomai
 class BangActionChanceType:
     rolecard = "rolecard"
     charactercard = "charactercard"
-    normalcard = "normalcard"
+    playingcard = "playingcard"
 
 
 class BangActionChance(AbstractActionChance):
     def __init__(self, card):
         logger = roomai.get_logger()
+        self.__is_public__ = False
         if isinstance(card, PlayingCard):
-            self.__type__ = BangActionChanceType.normalcard
+            self.__type__ = BangActionChanceType.playingcard
             self.__card__ = card
             self.__key__  = card.key
         elif isinstance(card, CharacterCard):
@@ -37,7 +38,7 @@ class BangActionChance(AbstractActionChance):
             raise TypeError("In the constructor BangActionChance(card), the parameter card must be NormalCard, CharacterCard or RoleCard")
 
     def __get_type__(self): return self.__type__
-    type = property(__get_type__, doc = "the type of BangActionChance, e.g., type=%s, type=%s or type=%s"%(BangActionChanceType.rolecard, BangActionChanceType.normalcard, BangActionChanceType.charactercard))
+    type = property(__get_type__, doc = "the type of BangActionChance, e.g., type=%s, type=%s or type=%s"%(BangActionChanceType.rolecard, BangActionChanceType.playingcard, BangActionChanceType.charactercard))
 
     def __get_card__(self): return  self.__card__
     card = property(__get_card__, doc = "the card of BangActionChance")
@@ -52,8 +53,8 @@ class BangActionChance(AbstractActionChance):
             logger.fatal("In the constructor BangActionChance.lookup(key), the key must be a str")
             raise TypeError("In the constructor BangActionChance.lookup(key), the key must be a str")
         if key not in AllBangActionChancesDict:
-            logger.fatal("In the constructor BangActionChance.lookup(key), the key must be the key of CharacterCard, RoleCard or NormalCard")
-            raise ValueError("In the constructor BangActionChance.lookup(key), the key must be the key of CharacterCard, RoleCard or NormalCard")
+            logger.fatal("In the constructor BangActionChance.lookup(key), the key must be the key of CharacterCard, RoleCard or PlayingCard")
+            raise ValueError("In the constructor BangActionChance.lookup(key), the key must be the key of CharacterCard, RoleCard or PlayingCard")
         return AllBangActionChancesDict[key]
 
     def __deepcopy__(self, memodict={}):

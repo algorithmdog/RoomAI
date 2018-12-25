@@ -1,4 +1,5 @@
 #!/bin/python
+#coding:utf-8
 import random
 import copy
 from random import choice
@@ -6,14 +7,21 @@ from random import choice
 import roomai
 from roomai.games.common import AbstractEnv
 from roomai.games.bang   import BangActionChance
+from roomai.games.bang   import BangAction
+from roomai.games.bang   import BangActionType
+from roomai.games.bang   import OtherActionNames
+
 from roomai.games.bang   import BangStatePublic
 from roomai.games.bang   import BangStatePrivate
 from roomai.games.bang   import BangStatePerson
-from roomai.games.bang   import PublicPersonInfo
+from roomai.games.bang   import PublicPlayerInfo
+from roomai.games.bang   import PhaseInfo
+
 
 from roomai.games.bang   import AllCharacterCardsDict
 from roomai.games.bang   import PlayingCardNames
 from roomai.games.bang   import CardRole
+
 
 class BangEnv(AbstractEnv):
 
@@ -25,14 +33,15 @@ class BangEnv(AbstractEnv):
         param_num_normal_players: how many players are in the game, the option must be in {2, 4, 5}, default 5. An example of the initialization param is {"param_num_normal_players":2} \n
         
         :param params: the initialization params
-        :return: infos, public_state, person_states, private_state
+        :return: infos, public_state_history, person_states_history, private_state_history, playerid_action_history
         '''
 
-
         logger         = roomai.get_logger()
+        ############ public state and private state ##########
         public_state   = BangStatePublic()
         private_state  = BangStatePrivate()
-
+        self.__public_state_history__.append(public_state)
+        self.__private_state_history__.append(private_state)
         if "param_num_normal_players" in params:
             public_state.__param_num_normal_players__ = params["param_num_normal_players"]
         else:
@@ -42,26 +51,28 @@ class BangEnv(AbstractEnv):
             logger.fatal("The number of normal players must be in [2,4,5]")
             raise ValueError("The number of normal players must be in [2,4,5]")
 
-        public_state.__public_person_infos__ = [PublicPersonInfo() for i in range(public_state.__param_num_normal_players__)]
+        public_state.__public_player_infos__ = [PublicPlayerInfo() for i in range(public_state.__param_num_normal_players__)]
         for i in range(public_state.__param_num_normal_players__):
-            public_state.__public_person_infos__[i].__num_hand_cards__ = 0
-            public_state.__public_person_infos__[i].__character_card__ = None
+            public_state.__public_player_infos__[i].__num_hand_cards__ = 0
+            public_state.__public_player_infos__[i].__character_card__ = None
+            public_state.__public_player_infos__[i].__equipment_cards__ = []
+        public_state.__phase_info__ = PhaseInfo()
+        public_state.__phase_info__.__playid__ = public_state.__param_num_normal_players__
+        public_state.__phase_info__.__phase__  = PhaseInfo.ChancePlay
+        public_state.__turn__                  = public_state.__param_num_normal_players__
 
-            public_state.__public_person_infos__[i].__equipment_cards__ = []
-
+        ########### person states #########
         person_states = [BangStatePerson() for i in range(public_state.param_num_normal_players+1)]
-
-        self.__public_state_history__.append(public_state)
-        self.__private_state_history__.append(private_state)
         for i in range(public_state.param_num_normal_players):
             self.__person_states_history__[i].append(person_states[i])
-            self.__person_states_history__[i][0].__id__         = i
-            self.__person_states_history__[i][0].__hand_cards__ = []
-            self.__person_states_history__[i][0].__role__       = ""
-        self.__person_states_history__[public_state.__param_num_normal_players__][0].__available_actions__ = self.available_actions()
-        
+            person_states[i][0].__id__         = i
+            person_states[i][0].__hand_cards__ = []
+            person_states[i][0].__role__       = None
+            person_states[i][0].__available_actions__ = dict()
 
-        self.__gen_infos__()
+        person_states[public_state.__param_num_normal_players__][0].__available_actions__ = self.available_actions()
+
+        return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__, self.__playerid_action_history__
 
 
     def forward(self, action):
@@ -73,11 +84,14 @@ class BangEnv(AbstractEnv):
         The Bang game environment steps with the action taken by the current player
 
         :param action
-        :returns:infos, public_state, person_states, private_state
+        :returns:infos, public_state_history, person_states_history, private_state_history, playerid_action_history
         """
+
+        logger = roomai.get_logger()
         private_state = copy.deepcopy(self.__private_state_history__[-1])
         public_state = copy.deepcopy(self.__public_state_history__[-1])
         person_states = [copy.deepcopy(self.__person_states_history__[i][-1]) for i in range(public_state.param_num_normal_players)]
+        person_states[public_state.turn].__available_actions__ = dict()
 
         self.__public_state_history__.append(public_state)
         self.__private_state_history__.append(private_state)
@@ -95,6 +109,7 @@ class BangEnv(AbstractEnv):
                         return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
                 # if all players have been assigned a character, return
                 public_state.__turn__ = (public_state.turn - 1) % public_state.param_num_normal_players
+
                 return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
 
             if action.type == BangActionChance.BangActionChanceType.rolecard: # chance player deals role cards
@@ -121,8 +136,7 @@ class BangEnv(AbstractEnv):
                 public_state.__turn__ = (public_state.turn - 1) % public_state.param_num_normal_players
                 return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
 
-        person_states[public_state.turn].__available_actions__ = dict()
-        public_state.__turn__ = (public_state.turn + 1) % 2
+
 
     def available_actions(self):
         '''
@@ -131,8 +145,9 @@ class BangEnv(AbstractEnv):
         :return: all valid actions
         '''
         logger = roomai.get_logger()
-        ## charactercard
 
+        ######################################   chance action  #################################
+        ## charactercard
         if self.__public_state_history__[-1].__public_person_infos__[-1].__character_card__ is None:
             available_actions = dict()
             tmp_set = set()
@@ -195,58 +210,34 @@ class BangEnv(AbstractEnv):
                 if num_outlaw > 0:
                     available_actions[CardRole.RoleCardNames.outlaw] = BangActionChance.lookup(CardRole.RoleCardNames.outlaw)
                 return available_actions
-
         ## deal cards
         available_actions = dict()
         for card in self.__private_state_history__.deck:
             available_actions[card.key] = card
 
-        ##
-        available_actions = dict()
-        turn = self.__public_state_history__[-1].__turn__
-        person_state = self.__person_states_history__[turn][-1]
-        for card in person_state.hand_cards:
-            if card.name == PlayingCardNames.Duello:
-                available_actions[card.key] = Bang
-            elif card.name == PlayingCardNames.Carabine:
-                pass
-            elif card.name == PlayingCardNames.Bang:
-                pass
-            elif card.name == PlayingCardNames.Emporia:
-                pass
-            elif card.name == PlayingCardNames.Volcanic:
-                pass
-            elif card.name == PlayingCardNames.Schofield:
-                pass
-            elif card.name == PlayingCardNames.Remington:
-                pass
-            elif card.name == PlayingCardNames.Panic:
-                pass
-            elif card.name == PlayingCardNames.Dynamite:
-                pass
-            elif card.name == PlayingCardNames.WellsFargo:
-                pass
-            elif card.name == PlayingCardNames.Prigione:
-                pass
-            elif card.name == PlayingCardNames.Saloon:
-                pass
-            elif card.name == PlayingCardNames.Beer:
-                pass
-            elif card.name == PlayingCardNames.Catling:
-                pass
-            elif card.name == PlayingCardNames.CatBalou:
-                pass
-            elif card.name == PlayingCardNames.Miss:
-                pass
-            elif card.name == PlayingCardNames.StageCoach:
-                pass
-            elif card.name == PlayingCardNames.Barrel:
-                pass
-            elif card.name == PlayingCardNames.Mustang:
-                pass
-            elif card.name == PlayingCardNames.Indian:
-                pass
-            elif card.name == PlayingCardNames.Winchester:
-                pass
-            elif card.name == PlayingCardNames.Appaloosa:
-                pass
+
+
+        ####################################### action ####################################
+        turn = self.__public_state_history__[-1].turn
+        tmp_set = dict()
+        if len(self.__public_state_history__[-1].response_infos_stack) > 0:
+            response_action = self.__public_state_history__[-1].response_infos_stack[-1].action
+            if isinstance(response_action,BangAction) == True \
+                    and response_action.type == BangActionType.card \
+                    and response_action.card.name == PlayingCardNames.Indian:
+                person_state = self.__person_states_history__[turn][-1]
+                for card in person_state.hand_cards:
+                    if  card.name == PlayingCardNames.Bang:
+                        tmp_set[card.name] = BangAction.lookup(card.name)
+                tmp_set[OtherActionNames.giveup] = BangAction.lookup(OtherActionNames.giveup)
+                return tmp_set
+
+            elif isinstance(response_action, BangAction) == True \
+                    and response_action.type == BangActionType.card \
+                    and response_action.card.name == PlayingCardNames.Catling:
+                person_state = self.__person_states_history__[turn][-1]
+                for card in person_state.hand_cards:
+                    if  card.name == PlayingCardNames.Miss:
+                        tmp_set[card.name] = BangAction.lookup(card.name)
+                    tmp_set[OtherActionNames.giveup] = BangAction.lookup(OtherActionNames.giveup)
+                    return tmp_set

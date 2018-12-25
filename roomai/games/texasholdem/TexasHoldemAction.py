@@ -40,6 +40,7 @@ class TexasHoldemAction(roomai.games.common.AbstractAction):
         self.__option__ = opt_price[0]
         self.__price__  = int(opt_price[1])
         self.__key__    = "%s_%d"%(self.option, self.price)
+        self.__is_public__ = True
         if self.__option__ == self.Fold or self.__option__ == self.Check:
             if self.price > 0:
                 raise ValueError("%s is invalid key for TexasHoldemAction. The %s option only matches the zero price"%(self.__key__, self.__option__))
