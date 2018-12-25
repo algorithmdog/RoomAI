@@ -148,6 +148,7 @@ AllPlayingCardsDict["%s-J-%s" % (PlayingCardNames.Prigione, PlayingCardSuits.Spa
 AllPlayingCardsDict["%s-Q-%s" % (PlayingCardNames.Barrel, PlayingCardSuits.Spade)]       = PlayingCard(PlayingCardNames.Barrel, "Q", PlayingCardSuits.Spade, PlayingCardColors.Brown)
 AllPlayingCardsDict["%s-K-%s" % (PlayingCardNames.Schofield, PlayingCardSuits.Spade)]       = PlayingCard(PlayingCardNames.Schofield, "K", PlayingCardSuits.Spade, PlayingCardColors.Blue)
 
+
 #######################################
 AllPlayingCardsDict["%s-A-%s" % (PlayingCardNames.Bang, PlayingCardSuits.Diamond)]          = PlayingCard(PlayingCardNames.Bang, "A", PlayingCardSuits.Diamond, PlayingCardColors.Brown)
 for i in range(2,11):

@@ -13,4 +13,3 @@ class BangStatePrivate(AbstractStatePrivate):
     def __get_deal_cards__(self):  return tuple(self.__deal_cards__)
     deal_cards = property(__get_deal_cards__, doc="the dealed cards of this game")
 
-

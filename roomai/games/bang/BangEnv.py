@@ -109,7 +109,6 @@ class BangEnv(AbstractEnv):
                         return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
                 # if all players have been assigned a character, return
                 public_state.__turn__ = (public_state.turn - 1) % public_state.param_num_normal_players
-
                 return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
 
             if action.type == BangActionChance.BangActionChanceType.rolecard: # chance player deals role cards
@@ -124,7 +123,7 @@ class BangEnv(AbstractEnv):
                 public_state.__turn__ = (public_state.turn - 1) % public_state.param_num_normal_players
                 return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
 
-            if action.type == BangActionChance.BangActionChanceType.normalcard:  # chance player deals/shuffles cards
+            if action.type == BangActionChance.BangActionChanceType.playingcard:  # chance player deals/shuffles cards
                 person_states[public_state.turn].__available_actions__ = self.available_actions()
 
                 private_state.__deal_cards__.append(action)
@@ -135,6 +134,47 @@ class BangEnv(AbstractEnv):
                     public_state.__discard_pile__ = []
                 public_state.__turn__ = (public_state.turn - 1) % public_state.param_num_normal_players
                 return self.__gen_infos__(), self.__public_state_history__, self.__person_states_history__, self.__private_state_history__
+
+
+        else:
+
+            if len(self.__public_state_history__[-1].response_infos_stack) > 0:
+                response_action = self.__public_state_history__[-1].response_infos_stack[-1].action
+                if isinstance(response_action,BangAction) == True \
+                        and response_action.type == BangActionType.card \
+                        and response_action.card.name == PlayingCardNames.Indian:
+                    if action.type == BangActionType.other and action.other == OtherActionNames.giveup:
+                        person_states[public_state.__turn__].__hp__ -= 1
+
+                    elif action.type == BangActionType.card and action.card.name == PlayingCardNames.Bang:
+                        person_states.__hand_cards__.remove(action.card)
+                        new_turn = (public_state.turn + 1) % (public_state.param_num_normal_players)
+
+                        public_state.__turn__ = (public_state.turn + 1) % public_state.param_num_normal_players
+
+                    else:
+                        logger.fatal("BangEnv generates %s action for responding Indian"%(action.key))
+                        raise Exception("BangEnv generates %s action for responding Indian"%(action.key))
+
+
+
+                elif isinstance(response_action,BangAction) == True \
+                        and response_action.type == BangActionType.card \
+                        and response_action.card.name == PlayingCardNames.Catling:
+
+                    if action.type == BangActionType.other and action.other == OtherActionNames.giveup:
+                        person_states[public_state.__turn__].__hp__ -= 1
+
+                    elif action.type == BangActionType.card and action.card.name == PlayingCardNames.Miss:
+                        person_states.__hand_cards__.remove(action.card)
+                        new_turn = (public_state.turn + 1) % (public_state.param_num_normal_players)
+
+                        public_state.__turn__ = (public_state.turn + 1) % public_state.param_num_normal_players
+
+
+                    else:
+                        logger.fatal("BangEnv generates %s action for responding Indian" % (action.key))
+                        raise Exception("BangEnv generates %s action for responding Indian" % (action.key))
 
 
 
@@ -210,6 +250,7 @@ class BangEnv(AbstractEnv):
                 if num_outlaw > 0:
                     available_actions[CardRole.RoleCardNames.outlaw] = BangActionChance.lookup(CardRole.RoleCardNames.outlaw)
                 return available_actions
+
         ## deal cards
         available_actions = dict()
         for card in self.__private_state_history__.deck:
