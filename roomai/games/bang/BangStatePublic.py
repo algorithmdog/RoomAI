@@ -56,22 +56,39 @@ class PhaseInfo(object):
         info.__phase__  = self.__phase__
         return info
 
+
+
+
 class ResponseInfo(object):
+
+    ToDead = "ToDead"
+    UseIndian = "UseIndian"
+    UseCatling = "UseCatling"
+
     def __init__(self):
-        self.__playerid__ = -1
-        self.__action__   = None
+        self.__subject__  = -1
+        self.__object__   = -1
+        self.__reason__   = -1
 
-    def __get_playerid__(self): return self.__playid__
-    playerid = property(__get_playerid__, doc="Now the players[turn] is responsing to the playerid")
+    def __get_reason__(self): return self.__reason__
+    reason = property(__get_reason__,
+                      doc="Now the players[responseinfo.subject] is responsing to the players[responseinfo.object] since response.reason")
 
-    def __get_action__(self):    return self.__action__
-    action = property(__get_action__,
-                     doc="Now the players[turn] is responsing to the playerid")
+    def __get_subject__(self):    return self.__subject__
+    subject = property(__get_subject__,
+                       doc="Now the players[responseinfo.subject] is responsing to the players[responseinfo.object] since response.reason")
+
+    def __get_object__(self):   return self.__object__
+    object = property(__get_object__,
+                      doc="Now the players[responseinfo.subject] is responsing to the players[responseinfo.object] since response.reason")
+
+
 
     def __deepcopy__(self, memodict={}):
         info = ResponseInfo()
-        info.__playid__ = self.__playid__
-        info.__action__ = self.__action__
+        info.__subject__ = self.__subject__
+        info.__object__ = self.__object__
+        info.__reason__ = self.__reason__
         return info
 
 class BangStatePublic(AbstractStatePublic):
