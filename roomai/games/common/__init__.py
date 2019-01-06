@@ -12,5 +12,5 @@ from roomai.games.common.AbstractPlayerChance import AbstractPlayerChance
 from roomai.games.common.AbstractPlayer import RandomPlayer
 from roomai.games.common.AbstractPlayerChance import RandomPlayerChance
 from roomai.games.common.AbstractEnv import AbstractEnv
-
+from roomai.games.common.A3CPlayer import  A3CPlayer
 

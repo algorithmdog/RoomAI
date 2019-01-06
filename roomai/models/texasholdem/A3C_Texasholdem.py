@@ -31,8 +31,6 @@ GLOBAL_RUNNING_R = []
 GLOBAL_EP = 0
 TEST_STATE = []
 TEST_R = []
-problist = [[] for i in range(8)]
-rewardlist = [[] for i in range(8)]
 
 N_A = 5
 action_dict= {"Fold":0, "Check":1, "Call":2, "Raise":3, "Allin":4}
@@ -103,7 +101,6 @@ class ACNet(object):
 
     def choose_action(self, s, actions, workid):  # run by a local
         prob_weights = self.SESS.run(self.a_prob, feed_dict={self.s: s[np.newaxis, :]})
-        problist[workid].append(prob_weights[0])
         all = 0.0
         for option in actions:
             all += prob_weights[0][action_dict[option]]
