@@ -16,6 +16,7 @@ class KuhnPokerAction(roomai.games.common.AbstractAction):
             raise ValueError("The key for KuhnPokerAction must be in [\"check\",\"bet\"]")
         super(KuhnPokerAction,self).__init__(key)
         self.__key__ = key
+        self.__is_public__ = True
 
     def __get_key__(self):
         return self.__key__

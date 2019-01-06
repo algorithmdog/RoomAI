@@ -20,6 +20,7 @@ class BangActionChanceType:
 class BangActionChance(AbstractActionChance):
     def __init__(self, card):
         logger = roomai.get_logger()
+        self.__is_public__ = False
         if isinstance(card, PlayingCard):
             self.__type__ = BangActionChanceType.playingcard
             self.__card__ = card
@@ -52,12 +53,18 @@ class BangActionChance(AbstractActionChance):
             logger.fatal("In the constructor BangActionChance.lookup(key), the key must be a str")
             raise TypeError("In the constructor BangActionChance.lookup(key), the key must be a str")
         if key not in AllBangActionChancesDict:
-            logger.fatal("In the constructor BangActionChance.lookup(key), the key must be the key of CharacterCard, RoleCard or NormalCard")
-            raise ValueError("In the constructor BangActionChance.lookup(key), the key must be the key of CharacterCard, RoleCard or NormalCard")
+            logger.fatal("In the constructor BangActionChance.lookup(key), the key must be the key of CharacterCard, RoleCard or PlayingCard")
+            raise ValueError("In the constructor BangActionChance.lookup(key), the key must be the key of CharacterCard, RoleCard or PlayingCard")
         return AllBangActionChancesDict[key]
 
     def __deepcopy__(self, memodict={}):
         return AllBangActionChancesDict[self.__key__]
 
-AllBangActionChancesDict = dict()
 
+AllBangActionChancesDict = dict()
+for key, value in AllPlayingCardsDict.items():
+    AllBangActionChancesDict[key] = value
+for key, value in AllCharacterCardsDict.items():
+    AllBangActionChancesDict[key] = value
+for key, value in AllRoleCardsDict.items():
+    AllBangActionChancesDict[key] = value
