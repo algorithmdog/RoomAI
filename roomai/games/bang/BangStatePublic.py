@@ -64,6 +64,7 @@ class ResponseInfo(object):
     ToDead = "ToDead"
     UseIndian = "UseIndian"
     UseCatling = "UseCatling"
+    Shuffle = "Shuffle"
 
     def __init__(self):
         self.__subject__  = -1
