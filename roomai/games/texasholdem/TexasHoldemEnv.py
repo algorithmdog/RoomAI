@@ -58,7 +58,7 @@ class TexasHoldemEnv(roomai.games.common.AbstractEnv):
 
         ## check initialization config
         if len(public_state.param_init_chips) != public_state.param_num_normal_players:
-            raise ValueError("len(env.param_initialization_chips) %d != param_num_normal_players %d" % (len(public_state.param_init_chips), public_state.num_normal_players))
+            raise ValueError("len(env.param_initialization_chips) %d != param_num_normal_players %d" % (len(public_state.param_init_chips), public_state.param_num_normal_players))
         if public_state.param_num_normal_players > 6:
             raise ValueError(
                 "The maximum of the number of players is 6. Now, the number of players = %d" % (public_state.param_num_normal_players))
