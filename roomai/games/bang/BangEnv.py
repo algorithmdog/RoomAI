@@ -262,23 +262,30 @@ class BangEnv(AbstractEnv):
         turn = self.__public_state_history__[-1].turn
         tmp_set = dict()
         if len(self.__public_state_history__[-1].response_infos_stack) > 0:
-            response_action = self.__public_state_history__[-1].response_infos_stack[-1].action
-            if isinstance(response_action,BangAction) == True \
-                    and response_action.type == BangActionType.card \
-                    and response_action.card.name == PlayingCardNames.Indian:
-                person_state = self.__person_states_history__[turn][-1]
-                for card in person_state.hand_cards:
+            person_states = self.__person_states_history__[-1]
+            subject = self.__public_state_history__[-1].response_infos_stack[-1].subject
+            object  = self.__public_state_history__[-1].response_infos_stack[-1].object
+            reason  = self.__public_state_history__[-1].response_infos_stack[-1].reason
+            if  reason == "UseIndian":
+                for card in person_states[subject].hand_cards:
                     if  card.name == PlayingCardNames.Bang:
                         tmp_set[card.name] = BangAction.lookup(card.name)
                 tmp_set[OtherActionNames.giveup] = BangAction.lookup(OtherActionNames.giveup)
                 return tmp_set
 
-            elif isinstance(response_action, BangAction) == True \
-                    and response_action.type == BangActionType.card \
-                    and response_action.card.name == PlayingCardNames.Catling:
-                person_state = self.__person_states_history__[turn][-1]
-                for card in person_state.hand_cards:
+            elif reason == "UseCatling":
+                for card in person_states[subject].hand_cards:
                     if  card.name == PlayingCardNames.Miss:
                         tmp_set[card.name] = BangAction.lookup(card.name)
-                    tmp_set[OtherActionNames.giveup] = BangAction.lookup(OtherActionNames.giveup)
-                    return tmp_set
+                tmp_set[OtherActionNames.giveup] = BangAction.lookup(OtherActionNames.giveup)
+                return tmp_set
+
+            elif reason == "ToDead":
+                for card in person_states[subject].hand_cards:
+                    if card.name == PlayingCardNames.Beer:
+                        tmp_set[card.name+"_%d"%(object)] = BangAction.lookup(card.name+"_%d"%(object))
+                tmp_set[OtherActionNames.giveup] = BangAction.lookup(OtherActionNames.giveup)
+                return tmp_set
+
+            elif reason == "Shuffle":
+                return tmp_set
