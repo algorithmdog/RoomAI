@@ -7,7 +7,7 @@ class PublicPlayerInfo(object):
         self.__num_hand_cards__  = 0
         self.__character_card__  = None
         self.__equipment_cards__ = []
-        self.__is_alive__         = True
+        self.__is_alive__        = True
 
     def __get_num_hand_cards__(self):   return self.__num_hand_cards__
     num_hand_cards = property(__get_num_hand_cards__,doc="The number of hand cards")
@@ -35,7 +35,6 @@ class PublicPlayerInfo(object):
 
 
 class PhaseInfo(object):
-    ChancePlay  = "ChancePlay"
     Draw        = "Draw"
     Play        = "Play"
     Discard     = "Discard"

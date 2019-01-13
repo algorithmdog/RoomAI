@@ -26,6 +26,7 @@ from roomai.games.bang.BangAction import AllBangActionsDict
 from roomai.games.bang.BangStatePublic import BangStatePublic
 from roomai.games.bang.BangStatePublic import PublicPlayerInfo
 from roomai.games.bang.BangStatePublic import PhaseInfo
+from roomai.games.bang.BangStatePublic import ResponseInfo
 
 from roomai.games.bang.BangStatePerson import BangStatePerson
 from roomai.games.bang.BangStatePrivate import BangStatePrivate

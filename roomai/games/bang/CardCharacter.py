@@ -1,5 +1,7 @@
 #!/bin/python
 
+import roomai
+
 class CharacterCardNames:
     Bart_Cassidy   = "Bart_Cassidy"
     #Bart Cassidy = Butch Cassidy – Each time he loses a life point, he immediately draws a normal card from the deck. (4 life points)
@@ -56,6 +58,13 @@ class CharacterCard(object):
     def __deepcopy__(self, memodict={}):
         return AllCharacterCardsDict[self.__key__]
 
+    @classmethod
+    def lookup(cls,key):
+        logger = roomai.get_logger()
+        if key not in AllCharacterCardsDict:
+            logger.fatal("key (%s) is not invalid charactor key" % (key))
+            raise ValueError("key (%s) is not invalid charactor key" % (key))
+        return AllCharacterCardsDict[key]
 
 AllCharacterCardsDict = dict()
 AllCharacterCardsDict[CharacterCardNames.Jesse_Jones] = CharacterCard(CharacterCardNames.Jesse_Jones, 4)

@@ -18,18 +18,18 @@ class BangActionChanceType:
 
 
 class BangActionChance(AbstractActionChance):
-    def __init__(self, card):
+    def __init__(self, key):
         logger = roomai.get_logger()
         self.__is_public__ = False
-        if isinstance(card, PlayingCard):
+        if key in AllPlayingCardsDict:
             self.__type__ = BangActionChanceType.playingcard
-            self.__card__ = card
-            self.__key__  = card.key
-        elif isinstance(card, CharacterCard):
+            self.__card__ = PlayingCard.lookup(key)
+            self.__key__  = key
+        elif key in AllCharacterCardsDict:
             self.__type__ = BangActionChanceType.charactercard
-            self.__card__ = card
-            self.__key__  = card.key
-        elif isinstance(card, RoleCard):
+            self.__card__ = CharacterCard.lookup(key)
+            self.__key__  = key
+        elif key in AllRoleCardsDict:
             self.__type__ = BangActionChanceType.rolecard
             self.__card__ = card
             self.__key__  = card.key

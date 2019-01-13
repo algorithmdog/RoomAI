@@ -16,6 +16,7 @@ from roomai.games.bang   import BangStatePrivate
 from roomai.games.bang   import BangStatePerson
 from roomai.games.bang   import PublicPlayerInfo
 from roomai.games.bang   import PhaseInfo
+from roomai.games.bang   import ResponseInfo
 
 
 from roomai.games.bang   import AllCharacterCardsDict
@@ -263,29 +264,32 @@ class BangEnv(AbstractEnv):
         tmp_set = dict()
         if len(self.__public_state_history__[-1].response_infos_stack) > 0:
             person_states = self.__person_states_history__[-1]
+            private_state = self.__private_state_history__[-1]
             subject = self.__public_state_history__[-1].response_infos_stack[-1].subject
             object  = self.__public_state_history__[-1].response_infos_stack[-1].object
             reason  = self.__public_state_history__[-1].response_infos_stack[-1].reason
-            if  reason == "UseIndian":
+            if  reason == ResponseInfo.UseIndian:
                 for card in person_states[subject].hand_cards:
                     if  card.name == PlayingCardNames.Bang:
                         tmp_set[card.name] = BangAction.lookup(card.name)
                 tmp_set[OtherActionNames.giveup] = BangAction.lookup(OtherActionNames.giveup)
                 return tmp_set
 
-            elif reason == "UseCatling":
+            elif reason == ResponseInfo.UseCatling:
                 for card in person_states[subject].hand_cards:
                     if  card.name == PlayingCardNames.Miss:
                         tmp_set[card.name] = BangAction.lookup(card.name)
                 tmp_set[OtherActionNames.giveup] = BangAction.lookup(OtherActionNames.giveup)
                 return tmp_set
 
-            elif reason == "ToDead":
+            elif reason == ResponseInfo.ToDead:
                 for card in person_states[subject].hand_cards:
                     if card.name == PlayingCardNames.Beer:
                         tmp_set[card.name+"_%d"%(object)] = BangAction.lookup(card.name+"_%d"%(object))
                 tmp_set[OtherActionNames.giveup] = BangAction.lookup(OtherActionNames.giveup)
                 return tmp_set
 
-            elif reason == "Shuffle":
+            elif reason == ResponseInfo.Shuffle:
+                for card in private_state.shuffle_deck:
+                    tmp_set = [card.name]
                 return tmp_set
