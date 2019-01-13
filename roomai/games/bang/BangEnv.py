@@ -291,5 +291,5 @@ class BangEnv(AbstractEnv):
 
             elif reason == ResponseInfo.Shuffle:
                 for card in private_state.shuffle_deck:
-                    tmp_set = [card.name]
+                    tmp_set[card.key] = BangActionChance.lookup(card.key)
                 return tmp_set

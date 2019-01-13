@@ -31,8 +31,8 @@ class BangActionChance(AbstractActionChance):
             self.__key__  = key
         elif key in AllRoleCardsDict:
             self.__type__ = BangActionChanceType.rolecard
-            self.__card__ = card
-            self.__key__  = card.key
+            self.__card__ = RoleCard.lookup(key)
+            self.__key__  = key
         else:
             logger.fatal("In the constructor BangActionChance(card), the parameter card must be NormalCard, CharacterCard or RoleCard")
             raise TypeError("In the constructor BangActionChance(card), the parameter card must be NormalCard, CharacterCard or RoleCard")
