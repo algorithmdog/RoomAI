@@ -1,3 +1,8 @@
+This project is stoped since there are better projects:
+
+https://github.com/dickreuter/Poker
+https://github.com/ishikota/PyPokerEngine
+
 # RoomAI
 
 [![Build Status](https://travis-ci.org/roomai/RoomAI.svg?branch=master)](https://travis-ci.org/roomai/RoomAI.svg?branch=master)
